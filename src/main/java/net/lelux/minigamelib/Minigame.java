@@ -1,8 +1,10 @@
 package net.lelux.minigamelib;
 
 import net.lelux.minigamelib.config.GameConfig;
+import net.lelux.minigamelib.player.GamePlayer;
 import net.lelux.minigamelib.teams.ScoreboardManager;
 import net.lelux.minigamelib.timer.GameState;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class Minigame extends JavaPlugin {
@@ -38,5 +40,21 @@ public abstract class Minigame extends JavaPlugin {
 
     public static ScoreboardManager getScoreboardManager() {
         return scoreboardManager;
+    }
+
+    public static void changedGameState() {
+        if(GameState.is(GameState.LOBBY)) {
+            Bukkit.getServer().getOnlinePlayers()
+                    .forEach(p -> p.teleport(config.getMap().getLobbySpawn()));
+        } else if(GameState.is(GameState.INGAME)) {
+            Bukkit.getServer().getOnlinePlayers()
+                    .forEach(p -> p.teleport(GamePlayer.toGamePlayer(p).getTeam().getSpawn()));
+        } else if(GameState.is(GameState.END)) {
+            Bukkit.getServer().getOnlinePlayers()
+                    .forEach(p -> p.teleport(config.getMap().getEndSpawn()));
+            Bukkit.getServer().getOnlinePlayers()
+                    .forEach(p -> GamePlayer.toGamePlayer(p).setVisible(true));
+            config.getStopCountdown().start();
+        }
     }
 }

@@ -3,6 +3,10 @@ package net.lelux.minigamelib.config;
 import net.lelux.minigamelib.Minigame;
 import net.lelux.minigamelib.connections.MySQL;
 import net.lelux.minigamelib.connections.Vault;
+import net.lelux.minigamelib.timer.Countdown;
+import net.lelux.minigamelib.timer.Event;
+import net.lelux.minigamelib.timer.GameState;
+import org.bukkit.Bukkit;
 
 public class GameConfig {
 
@@ -11,13 +15,27 @@ public class GameConfig {
     private final MySQL mySQL;
     private final Vault vault;
     private final int respawnCount;
+    private final Countdown startCountdown;
+    private final Countdown stopCountdown;
 
-    public GameConfig(Minigame minigame, GameMap map, MySQL mySQL, int respawnCount) {
+    public GameConfig(Minigame minigame, GameMap map, MySQL mySQL, int respawnCount, int startCountdown, int stopCountdown) {
         this.minigame = minigame;
         this.map = map;
         this.mySQL = mySQL;
         this.vault = new Vault();
         this.respawnCount = respawnCount;
+        this.startCountdown = new Countdown(startCountdown, new Event() {
+            @Override
+            public void fire() {
+                GameState.set(GameState.INGAME);
+            }
+        });
+        this.stopCountdown = new Countdown(stopCountdown, new Event() {
+            @Override
+            public void fire() {
+                Bukkit.getServer().shutdown();
+            }
+        });
     }
 
     public Minigame getMinigame() {
@@ -38,5 +56,13 @@ public class GameConfig {
 
     public int getRespawnCount() {
         return respawnCount;
+    }
+
+    public Countdown getStartCountdown() {
+        return startCountdown;
+    }
+
+    public Countdown getStopCountdown() {
+        return stopCountdown;
     }
 }

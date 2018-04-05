@@ -12,10 +12,15 @@ public class JoinLeaveListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         GamePlayer gp = GamePlayer.toGamePlayer(e.getPlayer());
-        if(GameState.is(GameState.LOBBY)) {
+        if (GameState.is(GameState.LOBBY)) {
             gp.setVisible(true);
-        } else {
+            e.getPlayer().teleport(Minigame.getGameConfig().getMap().getLobbySpawn());
+        } else if (GameState.is(GameState.INGAME)) {
             gp.setSpectator(true);
+            e.getPlayer().teleport(Minigame.getGameConfig().getMap().getSpectatorSpawn());
+        } else if (GameState.is(GameState.END)) {
+            gp.setVisible(true);
+            e.getPlayer().teleport(Minigame.getGameConfig().getMap().getEndSpawn());
         }
         GamePlayer.getInvisiblePlayers().forEach(p ->
                 gp.toPlayer().hidePlayer(p.toPlayer()));

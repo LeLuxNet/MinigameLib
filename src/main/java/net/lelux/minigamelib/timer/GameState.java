@@ -1,5 +1,7 @@
 package net.lelux.minigamelib.timer;
 
+import net.lelux.minigamelib.Minigame;
+
 public enum GameState {
 
     LOBBY,
@@ -9,7 +11,10 @@ public enum GameState {
     private static GameState state;
 
     public static void set(GameState state) {
-        GameState.state = state;
+        if(GameState.state != state) {
+            GameState.state = state;
+            Minigame.changedGameState();
+        }
     }
 
     public static GameState get() {
