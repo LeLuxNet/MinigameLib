@@ -1,8 +1,7 @@
 package net.lelux.minigamelib.config;
 
 import net.lelux.minigamelib.teams.GameTeam;
-import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
+import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,21 +13,20 @@ public class GameMap {
     private final String name;
     private final List<GameSpawner> spawners;
     private final List<GameTeam> teamList;
+    private final Location lobbySpawn;
+    private final Location spectatorSpawn;
+    private final Location endSpawn;
 
-    public GameMap(String name, int teamCount, int teamSize, List<GameTeam> teamList) {
+    public GameMap(String name, int teamCount, int teamSize, List<GameTeam> teamList,
+                   Location lobbySpawn, Location spectatorSpawn, Location endSpawn) {
         this.name = name;
         this.teamCount = teamCount;
         this.teamSize = teamSize;
+        this.teamList = teamList;
         spawners = new ArrayList<>();
-        if(teamList == null) {
-            this.teamList = new ArrayList<>();
-            this.teamList.add(new GameTeam("Red", ChatColor.RED, DyeColor.RED));
-            this.teamList.add(new GameTeam("Blue", ChatColor.BLUE, DyeColor.BLUE));
-            this.teamList.add(new GameTeam("Yellow", ChatColor.YELLOW, DyeColor.YELLOW));
-            this.teamList.add(new GameTeam("Green", ChatColor.GREEN, DyeColor.GREEN));
-        } else {
-            this.teamList = teamList;
-        }
+        this.lobbySpawn = lobbySpawn;
+        this.spectatorSpawn = spectatorSpawn;
+        this.endSpawn = endSpawn == null ? lobbySpawn : endSpawn;
     }
 
     public String getName() {
@@ -62,5 +60,17 @@ public class GameMap {
 
     public List<GameTeam> getTeamList() {
         return teamList;
+    }
+
+    public Location getLobbySpawn() {
+        return lobbySpawn;
+    }
+
+    public Location getSpectatorSpawn() {
+        return spectatorSpawn;
+    }
+
+    public Location getEndSpawn() {
+        return endSpawn;
     }
 }

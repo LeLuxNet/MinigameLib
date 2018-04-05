@@ -17,12 +17,14 @@ public class GamePlayer {
 
     private boolean spectator;
     private GameTeam team;
+    private int respawnCount;
 
     private static Map<String, GamePlayer> gamePlayerMap = new HashMap<>();
     private static List<GamePlayer> invisiblePlayers = new ArrayList<>();
 
     private GamePlayer(Player player) {
         this.player = player;
+        respawnCount = Minigame.getGameConfig().getRespawnCount();
     }
 
     public static GamePlayer toGamePlayer(Player p) {
@@ -70,6 +72,16 @@ public class GamePlayer {
 
     public GameTeam getTeam() {
         return team;
+    }
+
+    public int getRespawnCount() {
+        return respawnCount;
+    }
+
+    public void setRespawnCount(int respawnCount) {
+        if(respawnCount >= -1) {
+            this.respawnCount = respawnCount;
+        }
     }
 
     public static List<GamePlayer> getInvisiblePlayers() {

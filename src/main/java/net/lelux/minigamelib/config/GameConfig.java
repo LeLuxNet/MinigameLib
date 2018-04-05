@@ -10,12 +10,14 @@ public class GameConfig {
     private final GameMap map;
     private final MySQL mySQL;
     private final Vault vault;
+    private final int respawnCount;
 
-    public GameConfig(Minigame minigame, GameMap map, MySQL mySQL) {
+    public GameConfig(Minigame minigame, GameMap map, MySQL mySQL, int respawnCount) {
         this.minigame = minigame;
         this.map = map;
         this.mySQL = mySQL;
         this.vault = new Vault();
+        this.respawnCount = respawnCount;
     }
 
     public Minigame getMinigame() {
@@ -32,5 +34,9 @@ public class GameConfig {
 
     public Vault getVault() {
         return vault;
+    }
+
+    public int getRespawnCount() {
+        return respawnCount;
     }
 }
