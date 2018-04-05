@@ -6,9 +6,9 @@ import java.util.ResourceBundle;
 
 public class Languages {
 
-    public static ResourceBundle bundle;
+    private static ResourceBundle bundle;
 
-    public static void load() {
+    private static void load() {
         bundle = ResourceBundle.getBundle("lang", Locale.getDefault());
     }
 

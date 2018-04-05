@@ -24,7 +24,7 @@ public abstract class Connection<E> {
             if (success) {
                 Log.info(Languages.getString("connect", name), true);
             } else {
-                Log.err(Languages.getString("connect_err", name), true);
+                Log.warn(Languages.getString("connect_err", name), true);
             }
         }
     }
