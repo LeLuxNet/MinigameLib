@@ -18,23 +18,31 @@ public class Minigame extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        config = onStart();
+        preInitialisation();
+
+        config = initialisation();
 
         GameState.set(GameState.LOBBY);
         config.getMySQL().connect();
         config.getVault().connect();
         scoreboardManager = new ScoreboardManager(config.getMap().getTeamList(), config.getMap().getTeamCount());
         initListeners();
+
+        postInitialisation();
     }
 
     @Override
     public void onDisable() {
         onStop();
+        config.getVault().disconnect();
+        config.getMySQL().disconnect();
     }
 
-    public GameConfig onStart() {
-        return null;
-    }
+    public void preInitialisation() {}
+
+    public GameConfig initialisation() { return null; }
+
+    public void postInitialisation() {}
 
     public void onStop() {
 
