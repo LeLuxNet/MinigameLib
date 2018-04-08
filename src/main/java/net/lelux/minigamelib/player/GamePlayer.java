@@ -1,11 +1,14 @@
 package net.lelux.minigamelib.player;
 
 import net.lelux.minigamelib.Minigame;
+import net.lelux.minigamelib.achievements.GameAchievement;
 import net.lelux.minigamelib.teams.GameTeam;
-import net.lelux.minigamelib.timer.GameState;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import javax.xml.transform.Result;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +28,9 @@ public class GamePlayer {
     private GamePlayer(Player player) {
         this.player = player;
         respawnCount = Minigame.getGameConfig().getRespawnCount();
+        if (!Minigame.getGameConfig().getVault().getEco().hasAccount(player)) {
+            Minigame.getGameConfig().getVault().getEco().createPlayerAccount(player);
+        }
     }
 
     public static GamePlayer toGamePlayer(Player p) {
@@ -39,8 +45,8 @@ public class GamePlayer {
     }
 
     public void setVisible(boolean val) {
-        if(invisiblePlayers.contains(this) == val) {
-            if(val) {
+        if (invisiblePlayers.contains(this) == val) {
+            if (val) {
                 invisiblePlayers.remove(this);
                 Bukkit.getServer().getOnlinePlayers()
                         .forEach(p -> p.showPlayer(player));
@@ -59,7 +65,7 @@ public class GamePlayer {
     public void setSpectator(boolean val) {
         spectator = val;
         setVisible(!val);
-        if(val) {
+        if (val) {
             Minigame.getScoreboardManager().setScoreTeam(this, "01");
         } else {
             Minigame.getScoreboardManager().setTeam(this, team);
@@ -79,9 +85,53 @@ public class GamePlayer {
     }
 
     public void setRespawnCount(int respawnCount) {
-        if(respawnCount >= -1) {
+        if (respawnCount >= -1) {
             this.respawnCount = respawnCount;
         }
+    }
+
+    public boolean hasAchievement(GameAchievement a) {
+        ResultSet rs = Minigame.getGameConfig().getMySQL().getResult("SELECT * FROM "
+                + a.getGroup() + " WHERE uuid=" + player.getUniqueId().toString());
+        try {
+            return rs.getBoolean(a.getUniqueName());
+        } catch (SQLException e) {
+
+        }
+        return true;
+    }
+
+    public void addAchievement(GameAchievement a) {
+        if (!hasAchievement(a)) {
+            Minigame.getGameConfig().getMySQL().update("UPDATE " + a.getGroup() + " SET "
+                    + a.getUniqueName() + "=1 WHERE uuid=" + player.getUniqueId().toString());
+        }
+    }
+
+    public void removeAchievement(GameAchievement a) {
+        if (hasAchievement(a)) {
+            Minigame.getGameConfig().getMySQL().update("UPDATE " + a.getGroup() + " SET "
+                    + a.getUniqueName() + "=0 WHERE uuid=" + player.getUniqueId().toString());
+        }
+    }
+
+    public boolean buyAchievement(GameAchievement a) {
+        if (!hasAchievement(a) && Minigame.getGameConfig().getVault().isConnected()
+                && Minigame.getGameConfig().getVault().getEco().has(player, a.getPrice())) {
+            Minigame.getGameConfig().getVault().getEco().withdrawPlayer(player, a.getPrice());
+            addAchievement(a);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean sellAchievement(GameAchievement a) {
+        if (hasAchievement(a) && Minigame.getGameConfig().getVault().isConnected()) {
+            Minigame.getGameConfig().getVault().getEco().depositPlayer(player, a.getPrice());
+            removeAchievement(a);
+            return true;
+        }
+        return false;
     }
 
     public static List<GamePlayer> getInvisiblePlayers() {

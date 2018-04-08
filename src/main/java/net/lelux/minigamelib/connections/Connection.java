@@ -13,7 +13,6 @@ public abstract class Connection<E> {
     }
 
     public void connect() {
-
         if (!isConnected()) {
             boolean success;
             try {

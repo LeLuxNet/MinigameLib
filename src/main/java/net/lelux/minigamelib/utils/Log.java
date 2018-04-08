@@ -6,7 +6,7 @@ import java.util.logging.Level;
 
 public class Log {
 
-    public static final String PREFIX = "§r[MinigameLib] ";
+    public static final String PREFIX = "[MinigameLib] ";
 
     public static void info(String msg, boolean prefix) {
         log(Level.INFO, msg, prefix);

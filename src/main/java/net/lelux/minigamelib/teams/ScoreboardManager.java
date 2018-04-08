@@ -10,8 +10,8 @@ import java.util.List;
 
 public class ScoreboardManager {
 
-    private Scoreboard scoreboard;
-    private List<GameTeam> teamList = new ArrayList<>();
+    private final Scoreboard scoreboard;
+    private final List<GameTeam> teamList;
 
     public ScoreboardManager(List<GameTeam> teamList, int teamCount) {
         scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -19,8 +19,10 @@ public class ScoreboardManager {
         scoreboard.registerNewTeam("01").setPrefix("§8");
         scoreboard.registerNewTeam("02").setPrefix("§0");
 
+        this.teamList = new ArrayList<>();
+
         for (int i = 0; i < teamCount; i++) {
-            teamList.add(teamList.get(i));
+            this.teamList.add(teamList.get(i));
             Team t = scoreboard.registerNewTeam(String.valueOf(i + 1));
             t.setPrefix(teamList.get(i).getTextColor().toString());
             t.setAllowFriendlyFire(false);

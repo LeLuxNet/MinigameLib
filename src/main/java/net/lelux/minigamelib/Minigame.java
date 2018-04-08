@@ -1,24 +1,30 @@
 package net.lelux.minigamelib;
 
 import net.lelux.minigamelib.config.GameConfig;
+import net.lelux.minigamelib.listeners.DamageListener;
+import net.lelux.minigamelib.listeners.DeathListener;
+import net.lelux.minigamelib.listeners.JoinLeaveListener;
 import net.lelux.minigamelib.player.GamePlayer;
 import net.lelux.minigamelib.teams.ScoreboardManager;
 import net.lelux.minigamelib.timer.GameState;
 import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public abstract class Minigame extends JavaPlugin {
+public class Minigame extends JavaPlugin {
 
     private static GameConfig config;
     private static ScoreboardManager scoreboardManager;
 
     @Override
     public void onEnable() {
-        GameState.set(GameState.LOBBY);
-
         config = onStart();
 
+        GameState.set(GameState.LOBBY);
+        config.getMySQL().connect();
+        config.getVault().connect();
         scoreboardManager = new ScoreboardManager(config.getMap().getTeamList(), config.getMap().getTeamCount());
+        initListeners();
     }
 
     @Override
@@ -26,9 +32,13 @@ public abstract class Minigame extends JavaPlugin {
         onStop();
     }
 
-    abstract GameConfig onStart();
+    public GameConfig onStart() {
+        return null;
+    }
 
-    abstract void onStop();
+    public void onStop() {
+
+    }
 
     public static GameConfig getGameConfig() {
         return config;
@@ -56,5 +66,14 @@ public abstract class Minigame extends JavaPlugin {
                     .forEach(p -> GamePlayer.toGamePlayer(p).setVisible(true));
             config.getStopCountdown().start();
         }
+    }
+
+    private void initListeners() {
+        initListener(new DamageListener());
+        initListener(new JoinLeaveListener());
+        initListener(new DeathListener());
+    }
+    private void initListener(Listener listener) {
+        Bukkit.getServer().getPluginManager().registerEvents(listener, Minigame.getMinigame());
     }
 }
