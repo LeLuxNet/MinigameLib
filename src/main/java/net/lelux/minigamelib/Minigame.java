@@ -5,6 +5,7 @@ import net.lelux.minigamelib.listeners.DamageListener;
 import net.lelux.minigamelib.listeners.DeathListener;
 import net.lelux.minigamelib.listeners.JoinLeaveListener;
 import net.lelux.minigamelib.player.GamePlayer;
+import net.lelux.minigamelib.stats.StatsManager;
 import net.lelux.minigamelib.teams.ScoreboardManager;
 import net.lelux.minigamelib.timer.GameState;
 import org.bukkit.Bukkit;
@@ -15,6 +16,7 @@ public class Minigame extends JavaPlugin {
 
     private static GameConfig config;
     private static ScoreboardManager scoreboardManager;
+    private static StatsManager statsManager;
 
     @Override
     public void onEnable() {
@@ -26,6 +28,7 @@ public class Minigame extends JavaPlugin {
         config.getMySQL().connect();
         config.getVault().connect();
         scoreboardManager = new ScoreboardManager(config.getMap().getTeamList(), config.getMap().getTeamCount());
+        statsManager = new StatsManager();
         initListeners();
 
         postInitialisation();
@@ -58,6 +61,10 @@ public class Minigame extends JavaPlugin {
 
     public static ScoreboardManager getScoreboardManager() {
         return scoreboardManager;
+    }
+
+    public static StatsManager getStatsManager() {
+        return statsManager;
     }
 
     public static void changedGameState() {

@@ -7,14 +7,12 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class Countdown {
 
-    private final long ticks;
     private final Event event;
-    private int countdown;
+    private int seconds;
     private BukkitTask task;
 
-    public Countdown(int secounds, Event event) {
-        ticks = secounds * 20;
-        countdown = secounds;
+    public Countdown(int seconds, Event event) {
+        this.seconds = seconds;
         this.event = event;
     }
 
@@ -23,14 +21,15 @@ public class Countdown {
             task = Bukkit.getScheduler().runTaskTimer(Minigame.getMinigame(), new Runnable() {
                 @Override
                 public void run() {
-                    Bukkit.getServer().getOnlinePlayers().forEach(p -> p.setLevel(countdown));
-                    if(countdown <= 0) {
+                    Bukkit.getServer().getOnlinePlayers().forEach(p -> p.setLevel(seconds));
+                    System.out.println(seconds);
+                    if(seconds <= 0) {
                         event.fire();
                         task.cancel();
                     }
-                    countdown--;
+                    seconds--;
                 }
-            }, 0, ticks);
+            }, 0, 20);
         }
     }
 }
