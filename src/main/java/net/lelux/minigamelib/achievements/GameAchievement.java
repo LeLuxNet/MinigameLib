@@ -31,15 +31,19 @@ public class GameAchievement {
     public GameAchievement(String name, String uniqueName, GameAchievementGroup group, Material hasMaterial, Material hasntMaterial) {
         this(name, uniqueName, group, hasMaterial, hasntMaterial, 0);
     }
+
     public GameAchievement(String name, String uniqueName, GameAchievementGroup group, Material material, double price) {
         this(name, uniqueName, group, material, material, price);
     }
+
     public GameAchievement(String name, String uniqueName, GameAchievementGroup group, Material material) {
         this(name, uniqueName, group, material, material);
     }
+
     public GameAchievement(String name, String uniqueName, GameAchievementGroup group, double price) {
         this(name, uniqueName, group, Material.EMPTY_MAP, Material.PAPER, price);
     }
+
     public GameAchievement(String name, String uniqueName, GameAchievementGroup group) {
         this(name, uniqueName, group, 0);
     }

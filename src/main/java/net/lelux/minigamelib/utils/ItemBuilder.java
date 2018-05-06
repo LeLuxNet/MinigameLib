@@ -77,7 +77,7 @@ public class ItemBuilder {
     public ItemBuilder addLoreLine(String line) {
         ItemMeta ism = is.getItemMeta();
         List<String> lore;
-        if(ism.hasLore()) {
+        if (ism.hasLore()) {
             lore = ism.getLore();
         } else {
             lore = new ArrayList<>();

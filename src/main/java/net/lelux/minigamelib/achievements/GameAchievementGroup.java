@@ -1,7 +1,6 @@
 package net.lelux.minigamelib.achievements;
 
 import net.lelux.minigamelib.Minigame;
-import net.lelux.minigamelib.connections.MySQL;
 import net.lelux.minigamelib.player.GamePlayer;
 import net.lelux.minigamelib.utils.ChestUtils;
 import org.bukkit.Bukkit;
@@ -16,7 +15,7 @@ public class GameAchievementGroup {
     private final String name;
     private final String uniqueName;
 
-    public GameAchievementGroup (String name, String uniqueName) {
+    public GameAchievementGroup(String name, String uniqueName) {
         list = new ArrayList<>();
         this.name = name;
         this.uniqueName = "a_" + uniqueName;
@@ -24,7 +23,7 @@ public class GameAchievementGroup {
                 + " (uuid VARCHAR(36) NOT NULL, PRIMARY KEY (uuid));");
     }
 
-    public void add (GameAchievement a) {
+    public void add(GameAchievement a) {
         list.add(a);
         Minigame.getGameConfig().getMySQL().update("ALTER TABLE " + uniqueName + " ADD COLUMN " + a.getUniqueName() + " TINYINT NOT NULL");
     }

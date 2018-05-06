@@ -8,6 +8,8 @@ import net.lelux.minigamelib.player.GamePlayer;
 import net.lelux.minigamelib.stats.StatsManager;
 import net.lelux.minigamelib.teams.ScoreboardManager;
 import net.lelux.minigamelib.timer.GameState;
+import net.lelux.minigamelib.utils.Languages;
+import net.lelux.minigamelib.utils.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,9 +22,13 @@ public class Minigame extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Log.info(Languages.getString("start", "PreInitialisation"), true);
         preInitialisation();
+        Log.info(Languages.getString("stop", "PreInitialisation"), true);
 
+        Log.info(Languages.getString("start", "Initialisation"), true);
         config = initialisation();
+        Log.info(Languages.getString("stop", "Initialisation"), true);
 
         GameState.set(GameState.LOBBY);
         config.getMySQL().connect();
@@ -31,7 +37,9 @@ public class Minigame extends JavaPlugin {
         statsManager = new StatsManager();
         initListeners();
 
+        Log.info(Languages.getString("start", "PostInitialisation"), true);
         postInitialisation();
+        Log.info(Languages.getString("stop", "PostInitialisation"), true);
     }
 
     @Override
@@ -41,11 +49,15 @@ public class Minigame extends JavaPlugin {
         config.getMySQL().disconnect();
     }
 
-    public void preInitialisation() {}
+    public void preInitialisation() {
+    }
 
-    public GameConfig initialisation() { return null; }
+    public GameConfig initialisation() {
+        return null;
+    }
 
-    public void postInitialisation() {}
+    public void postInitialisation() {
+    }
 
     public void onStop() {
 
@@ -68,13 +80,13 @@ public class Minigame extends JavaPlugin {
     }
 
     public static void changedGameState() {
-        if(GameState.is(GameState.LOBBY)) {
+        if (GameState.is(GameState.LOBBY)) {
             Bukkit.getServer().getOnlinePlayers()
                     .forEach(p -> p.teleport(config.getMap().getLobbySpawn()));
-        } else if(GameState.is(GameState.INGAME)) {
+        } else if (GameState.is(GameState.INGAME)) {
             Bukkit.getServer().getOnlinePlayers()
                     .forEach(p -> p.teleport(GamePlayer.toGamePlayer(p).getTeam().getSpawn()));
-        } else if(GameState.is(GameState.END)) {
+        } else if (GameState.is(GameState.END)) {
             Bukkit.getServer().getOnlinePlayers()
                     .forEach(p -> p.teleport(config.getMap().getEndSpawn()));
             Bukkit.getServer().getOnlinePlayers()
@@ -88,6 +100,7 @@ public class Minigame extends JavaPlugin {
         initListener(new JoinLeaveListener());
         initListener(new DeathListener());
     }
+
     private void initListener(Listener listener) {
         Bukkit.getServer().getPluginManager().registerEvents(listener, Minigame.getMinigame());
     }

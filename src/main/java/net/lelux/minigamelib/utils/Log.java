@@ -11,9 +11,11 @@ public class Log {
     public static void info(String msg, boolean prefix) {
         log(Level.INFO, msg, prefix);
     }
+
     public static void warn(String msg, boolean prefix) {
         log(Level.WARNING, msg, prefix);
     }
+
     public static void err(String msg, boolean prefix) {
         log(Level.SEVERE, msg, prefix);
     }

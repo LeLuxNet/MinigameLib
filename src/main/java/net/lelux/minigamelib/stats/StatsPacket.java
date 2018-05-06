@@ -1,11 +1,11 @@
 package net.lelux.minigamelib.stats;
 
-public class GameStats {
+public class StatsPacket {
 
     private long deaths;
     private long kills;
 
-    public GameStats() {
+    public StatsPacket() {
         deaths = 0;
         kills = 0;
     }

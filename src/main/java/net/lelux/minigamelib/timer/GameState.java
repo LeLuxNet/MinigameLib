@@ -11,7 +11,7 @@ public enum GameState {
     private static GameState state;
 
     public static void set(GameState state) {
-        if(GameState.state != state) {
+        if (GameState.state != state) {
             GameState.state = state;
             Minigame.changedGameState();
         }

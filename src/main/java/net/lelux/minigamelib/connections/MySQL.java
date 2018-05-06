@@ -33,7 +33,7 @@ public class MySQL extends Connection<java.sql.Connection> {
     }
 
     public ResultSet getResult(String cmd) {
-        if(isConnected()) {
+        if (isConnected()) {
             try {
                 return con.createStatement().executeQuery(cmd);
             } catch (SQLException e) {
@@ -44,7 +44,7 @@ public class MySQL extends Connection<java.sql.Connection> {
     }
 
     public void update(String cmd) {
-        if(isConnected()) {
+        if (isConnected()) {
             try {
                 con.createStatement().executeUpdate(cmd);
             } catch (SQLException e) {

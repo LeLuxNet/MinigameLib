@@ -6,7 +6,6 @@ import net.lelux.minigamelib.teams.GameTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import javax.xml.transform.Result;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

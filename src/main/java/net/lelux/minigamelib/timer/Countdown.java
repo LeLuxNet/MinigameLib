@@ -1,33 +1,38 @@
 package net.lelux.minigamelib.timer;
 
 import net.lelux.minigamelib.Minigame;
-import net.lelux.minigamelib.utils.Languages;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 public class Countdown {
 
     private final Event event;
-    private int seconds;
+    private final int secounds;
+    private int countdown;
     private BukkitTask task;
 
     public Countdown(int seconds, Event event) {
-        this.seconds = seconds;
+        this.countdown = seconds;
+        this.secounds = seconds;
         this.event = event;
     }
 
     public void start() {
-        if(task == null) {
+        if (task == null) {
             task = Bukkit.getScheduler().runTaskTimer(Minigame.getMinigame(), new Runnable() {
                 @Override
                 public void run() {
-                    Bukkit.getServer().getOnlinePlayers().forEach(p -> p.setLevel(seconds));
-                    System.out.println(seconds);
-                    if(seconds <= 0) {
+                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                        p.setLevel(countdown);
+                        p.setExp((float) countdown / secounds);
+                    }
+                    System.out.println(countdown);
+                    if (countdown <= 0) {
                         event.fire();
                         task.cancel();
                     }
-                    seconds--;
+                    countdown--;
                 }
             }, 0, 20);
         }
