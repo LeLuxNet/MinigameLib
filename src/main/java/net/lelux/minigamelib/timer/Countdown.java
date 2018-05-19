@@ -7,19 +7,22 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class Countdown {
 
-    private final Event event;
+    private final CountdownEvent event;
     private final int secounds;
     private int countdown;
     private BukkitTask task;
+    private int runCount;
 
-    public Countdown(int seconds, Event event) {
+    public Countdown(int seconds, CountdownEvent event) {
         this.countdown = seconds;
         this.secounds = seconds;
         this.event = event;
+        this.runCount = 0;
     }
 
     public void start() {
-        if (task == null) {
+        if (!isRunning()) {
+            runCount++;
             task = Bukkit.getScheduler().runTaskTimer(Minigame.getMinigame(), new Runnable() {
                 @Override
                 public void run() {
@@ -36,5 +39,21 @@ public class Countdown {
                 }
             }, 0, 20);
         }
+    }
+
+    public int getCountdown() {
+        return countdown;
+    }
+
+    public void setCountdown(int countdown) {
+        this.countdown = countdown;
+    }
+
+    public int getRunCount() {
+        return runCount;
+    }
+
+    public boolean isRunning() {
+        return task != null;
     }
 }

@@ -1,5 +1,7 @@
 package net.lelux.minigamelib;
 
+import net.lelux.minigamelib.commands.MapCommand;
+import net.lelux.minigamelib.commands.StartCommand;
 import net.lelux.minigamelib.config.GameConfig;
 import net.lelux.minigamelib.listeners.DamageListener;
 import net.lelux.minigamelib.listeners.DeathListener;
@@ -26,8 +28,11 @@ public class Minigame extends JavaPlugin {
         preInitialisation();
         Log.info(Languages.getString("stop", "PreInitialisation"), true);
 
+        initCommands();
+
         Log.info(Languages.getString("start", "Initialisation"), true);
         config = initialisation();
+
         Log.info(Languages.getString("stop", "Initialisation"), true);
 
         GameState.set(GameState.LOBBY);
@@ -103,5 +108,10 @@ public class Minigame extends JavaPlugin {
 
     private void initListener(Listener listener) {
         Bukkit.getServer().getPluginManager().registerEvents(listener, Minigame.getMinigame());
+    }
+
+    private void initCommands() {
+        Bukkit.getPluginCommand("map").setExecutor(new MapCommand());
+        Bukkit.getPluginCommand("start").setExecutor(new StartCommand());
     }
 }

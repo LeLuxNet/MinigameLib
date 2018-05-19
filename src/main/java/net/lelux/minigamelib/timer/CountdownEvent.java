@@ -1,6 +1,6 @@
 package net.lelux.minigamelib.timer;
 
-public interface Event {
+public interface CountdownEvent {
 
     void fire();
 }

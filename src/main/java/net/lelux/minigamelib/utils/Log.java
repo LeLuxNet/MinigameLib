@@ -1,6 +1,6 @@
 package net.lelux.minigamelib.utils;
 
-import net.lelux.minigamelib.Minigame;
+import org.bukkit.Bukkit;
 
 import java.util.logging.Level;
 
@@ -21,6 +21,6 @@ public class Log {
     }
 
     private static void log(Level level, String msg, boolean prefix) {
-        Minigame.getMinigame().getLogger().log(level, prefix ? PREFIX + msg : msg);
+        Bukkit.getLogger().log(level, prefix ? PREFIX + msg : msg);
     }
 }
