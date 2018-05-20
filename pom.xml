@@ -65,6 +65,10 @@
             <id>vault-repo</id>
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -85,6 +89,11 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tr7zw.Item-NBT-API</groupId>
+            <artifactId>item-nbt-api</artifactId>
+            <version>17ac2d7ebd</version>
         </dependency>
     </dependencies>
 </project>

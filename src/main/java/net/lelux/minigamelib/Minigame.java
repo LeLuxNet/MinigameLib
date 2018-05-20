@@ -5,6 +5,7 @@ import net.lelux.minigamelib.commands.StartCommand;
 import net.lelux.minigamelib.config.GameConfig;
 import net.lelux.minigamelib.listeners.DamageListener;
 import net.lelux.minigamelib.listeners.DeathListener;
+import net.lelux.minigamelib.listeners.InteractListener;
 import net.lelux.minigamelib.listeners.JoinLeaveListener;
 import net.lelux.minigamelib.player.GamePlayer;
 import net.lelux.minigamelib.stats.StatsManager;
@@ -55,6 +56,7 @@ public class Minigame extends JavaPlugin {
     }
 
     public void preInitialisation() {
+
     }
 
     public GameConfig initialisation() {
@@ -62,6 +64,7 @@ public class Minigame extends JavaPlugin {
     }
 
     public void postInitialisation() {
+
     }
 
     public void onStop() {
@@ -104,6 +107,7 @@ public class Minigame extends JavaPlugin {
         initListener(new DamageListener());
         initListener(new JoinLeaveListener());
         initListener(new DeathListener());
+        initListener(new InteractListener());
     }
 
     private void initListener(Listener listener) {
