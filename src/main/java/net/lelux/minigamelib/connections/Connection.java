@@ -14,16 +14,12 @@ public abstract class Connection<E> {
 
     public void connect() {
         if (!isConnected()) {
-            boolean success;
             try {
-                success = forceConnect();
-            } catch (Exception e) {
-                success = false;
-            }
-            if (success) {
+                forceConnect();
                 Log.info(Languages.getString("connect", name), true);
-            } else {
-                Log.warn(Languages.getString("connect_err", name), true);
+            } catch (Exception e) {
+                Log.warn(Languages.getString("connect_err", name)
+                        + ": " + e.getMessage(), true);
             }
         }
     }
@@ -32,13 +28,9 @@ public abstract class Connection<E> {
         if (isConnected()) {
             boolean success;
             try {
-                success = forceDisconnect();
-            } catch (Exception e) {
-                success = false;
-            }
-            if (success) {
+                forceDisconnect();
                 Log.info(Languages.getString("disconnect", name), true);
-            } else {
+            } catch (Exception e) {
                 Log.err(Languages.getString("disconnect_err", name), true);
             }
         }

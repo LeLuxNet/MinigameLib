@@ -136,4 +136,10 @@ public class GamePlayer {
     public static List<GamePlayer> getInvisiblePlayers() {
         return invisiblePlayers;
     }
+
+    public String localizeString(String s) {
+        return s.replaceAll("${PLAYER_NAME}", player.getName())
+                .replaceAll("${TEAM_NAME}", team.getName())
+                .replaceAll("${TEAM_TEXT_COLOR}", team.getTextColor().toString());
+    }
 }

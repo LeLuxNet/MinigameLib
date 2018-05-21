@@ -2,6 +2,9 @@ package net.lelux.minigamelib.teams;
 
 import net.lelux.minigamelib.player.GamePlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -28,6 +31,12 @@ public class ScoreboardManager {
             t.setAllowFriendlyFire(false);
             t.setCanSeeFriendlyInvisibles(true);
         }
+
+        scoreboard.registerNewObjective("sidebar", "dummy");
+        scoreboard.getObjective("sidebar").setDisplaySlot(DisplaySlot.SIDEBAR);
+
+        scoreboard.registerNewObjective("player_health", "health");
+        scoreboard.getObjective("player_health").setDisplayName(" / 20");
     }
 
     public List<GameTeam> getTeamList() {
@@ -46,5 +55,26 @@ public class ScoreboardManager {
 
     public void reloadScoreboard() {
         Bukkit.getServer().getOnlinePlayers().forEach(p -> p.setScoreboard(scoreboard));
+    }
+
+    public void setSideboard(String... line) {
+        scoreboard.getObjective("sidebar").unregister();
+        scoreboard.registerNewObjective("sidebar", "dummy");
+        scoreboard.getObjective("sidebar").setDisplaySlot(DisplaySlot.SIDEBAR);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            GamePlayer gp = GamePlayer.toGamePlayer(p);
+            for (int i = 0; i < line.length; i++) {
+                String s = gp.localizeString(line[i]);
+                scoreboard.getObjective("sidebar").getScore(s).setScore(line.length - i);
+            }
+        }
+    }
+
+    public void showPlayerHealth(boolean b) {
+        if(b) {
+            scoreboard.getObjective("player_health").setDisplaySlot(DisplaySlot.BELOW_NAME);
+        } else {
+            scoreboard.getObjective("player_health").setDisplaySlot(null);
+        }
     }
 }

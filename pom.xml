@@ -94,6 +94,7 @@
             <groupId>com.github.tr7zw.Item-NBT-API</groupId>
             <artifactId>item-nbt-api</artifactId>
             <version>17ac2d7ebd</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

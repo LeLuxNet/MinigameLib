@@ -1,8 +1,7 @@
 package net.lelux.minigamelib;
 
-import net.lelux.minigamelib.commands.MapCommand;
-import net.lelux.minigamelib.commands.StartCommand;
 import net.lelux.minigamelib.config.GameConfig;
+import net.lelux.minigamelib.config.GameMap;
 import net.lelux.minigamelib.listeners.DamageListener;
 import net.lelux.minigamelib.listeners.DeathListener;
 import net.lelux.minigamelib.listeners.InteractListener;
@@ -14,6 +13,8 @@ import net.lelux.minigamelib.timer.GameState;
 import net.lelux.minigamelib.utils.Languages;
 import net.lelux.minigamelib.utils.Log;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,8 +29,6 @@ public class Minigame extends JavaPlugin {
         Log.info(Languages.getString("start", "PreInitialisation"), true);
         preInitialisation();
         Log.info(Languages.getString("stop", "PreInitialisation"), true);
-
-        initCommands();
 
         Log.info(Languages.getString("start", "Initialisation"), true);
         config = initialisation();
@@ -56,7 +55,6 @@ public class Minigame extends JavaPlugin {
     }
 
     public void preInitialisation() {
-
     }
 
     public GameConfig initialisation() {
@@ -64,11 +62,9 @@ public class Minigame extends JavaPlugin {
     }
 
     public void postInitialisation() {
-
     }
 
     public void onStop() {
-
     }
 
     public static GameConfig getGameConfig() {
@@ -114,8 +110,25 @@ public class Minigame extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(listener, Minigame.getMinigame());
     }
 
-    private void initCommands() {
-        Bukkit.getPluginCommand("map").setExecutor(new MapCommand());
-        Bukkit.getPluginCommand("start").setExecutor(new StartCommand());
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (cmd.getName().equalsIgnoreCase("map")) {
+            if (sender.hasPermission("minigamelib.map")) {
+                GameMap map = Minigame.getGameConfig().getMap();
+                sender.sendMessage(Languages.getString("map_command",
+                        map.getTeamCount() + "x" + map.getTeamSize(), map.getName()));
+                return true;
+            }
+        } else if (cmd.getName().equalsIgnoreCase("start")) {
+            if (sender.hasPermission("minigamelib.start")) {
+                if (Minigame.getGameConfig().getStartCountdown().isRunning() &&
+                        Minigame.getGameConfig().getStartCountdown().getRunCount() == 1) {
+                    Minigame.getGameConfig().getStartCountdown().
+                            setCountdown(Minigame.getGameConfig().getSkippedStartCountdown());
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }
