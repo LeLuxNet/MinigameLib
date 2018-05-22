@@ -12,14 +12,16 @@ public class InteractListener implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
-        NBTItem nbti = new NBTItem(e.getItem());
-        if(nbti.hasKey("minigamelib_clickableitem_id")) {
-            ClickableItem clicki = ClickableItem.toClickableItem(
-                    nbti.getInteger("minigamelib_clickableitem_id"));
-            if(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
-                clicki.fireLeftClick(e.getPlayer());
-            } else if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                clicki.fireRightClick(e.getPlayer());
+        if(e.getItem() != null) {
+            NBTItem nbti = new NBTItem(e.getItem());
+            if (nbti.hasKey("minigamelib_clickableitem_id")) {
+                ClickableItem clicki = ClickableItem.toClickableItem(
+                        nbti.getInteger("minigamelib_clickableitem_id"));
+                if (e.getAction() != Action.PHYSICAL) {
+                    clicki.fireClick(e.getAction() == Action.LEFT_CLICK_AIR ||
+                            e.getAction() == Action.LEFT_CLICK_BLOCK, e.getPlayer());
+                    e.setCancelled(true);
+                }
             }
         }
     }

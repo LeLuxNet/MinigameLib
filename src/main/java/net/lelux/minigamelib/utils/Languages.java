@@ -8,8 +8,12 @@ public class Languages {
 
     private static ResourceBundle bundle;
 
-    private static void load() {
+    public static void load() {
         bundle = ResourceBundle.getBundle("lang", Locale.getDefault());
+    }
+
+    public static void unload() {
+        bundle = null;
     }
 
     public static String getString(String msg, String... val) {

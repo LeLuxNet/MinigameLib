@@ -22,18 +22,16 @@ public class ClickableItem implements Buyable {
     private final int id;
     private final ItemStack cooldownItem;
     private final int cooldown;
-    private final ClickEvent clickEvent;
     private BukkitTask task;
     private int cooldownCount;
 
-    public ClickableItem(ItemStack item, ItemStack cooldownItem, int cooldown, ClickEvent clickEvent) {
+    public ClickableItem(ItemStack item, ItemStack cooldownItem, int cooldown) {
         this.id = nextId++;
         NBTItem nbti = new NBTItem(item);
         nbti.setInteger("minigamelib_clickableitem_id", id);
         this.item = nbti.getItem();
         this.cooldown = cooldown;
         this.cooldownItem = cooldownItem;
-        this.clickEvent = clickEvent;
         map.put(id, this);
     }
 
@@ -73,17 +71,19 @@ public class ClickableItem implements Buyable {
         return null;
     }
 
-    public void fireLeftClick(Player p) {
+    public void fireClick(boolean button, Player p) {
         if(p.getInventory().getItemInHand().equals(item)) {
-            clickEvent.onLeftClick();
-            startCooldown(p, p.getInventory().getHeldItemSlot());
+            if(button ? onLeftClick(p) : onRightClick(p)) {
+                startCooldown(p, p.getInventory().getHeldItemSlot());
+            }
         }
     }
 
-    public void fireRightClick(Player p) {
-        if(p.getInventory().getItemInHand().equals(item)) {
-            clickEvent.onRightClick();
-            startCooldown(p, p.getInventory().getHeldItemSlot());
-        }
+    public boolean onLeftClick(Player p) {
+        return false;
+    }
+
+    public boolean onRightClick(Player p) {
+        return false;
     }
 }
