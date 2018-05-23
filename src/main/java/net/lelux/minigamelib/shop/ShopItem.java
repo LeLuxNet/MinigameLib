@@ -30,7 +30,7 @@ public class ShopItem {
 
     public void buy(Player p, int count) {
         if(count < 0) {
-            count = item.getItem().getAmount() * -count;
+            count = item.getItem().getAmount() * - count;
         }
         int counter = 0;
         for(ItemStack is : p.getInventory()) {

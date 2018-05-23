@@ -75,7 +75,7 @@ public class Shop implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         Player p = (Player) e.getWhoClicked();
-        
+
         if (e.getInventory().getName().equals(name)) {
             e.setCancelled(true);
             if (e.getCurrentItem() == null || e.getRawSlot() > categoryInvSize + itemsInvSize) {
