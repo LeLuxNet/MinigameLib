@@ -37,9 +37,10 @@ public class ChestUtils {
             freePlaces.add(i);
         }
         for (int i = 0; i < count; i++) {
-            int place = freePlaces.get(MathUtils.generateRandomInt(freePlaces.size()));
+            int index = MathUtils.generateRandomInt(freePlaces.size());
+            int place = freePlaces.get(index);
             inv.setItem(place, getItem(MathUtils.generateRandomInt(probabilityCount)));
-            freePlaces.remove(place);
+            freePlaces.remove(index);
         }
         return inv;
     }

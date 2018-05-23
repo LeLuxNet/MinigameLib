@@ -4,17 +4,13 @@ import de.tr7zw.itemnbtapi.NBTItem;
 import net.lelux.minigamelib.Minigame;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClickableItem implements Buyable {
+public class ClickableItem implements ToItemConvertable {
 
     private static Map<Integer, ClickableItem> map = new HashMap<>();
     private static int nextId = 0;
@@ -22,16 +18,18 @@ public class ClickableItem implements Buyable {
     private final int id;
     private final ItemStack cooldownItem;
     private final int cooldown;
+    private final ClickEvent event;
     private BukkitTask task;
     private int cooldownCount;
 
-    public ClickableItem(ItemStack item, ItemStack cooldownItem, int cooldown) {
+    public ClickableItem(ItemStack item, ItemStack cooldownItem, int cooldown, ClickEvent event) {
         this.id = nextId++;
         NBTItem nbti = new NBTItem(item);
         nbti.setInteger("minigamelib_clickableitem_id", id);
         this.item = nbti.getItem();
         this.cooldown = cooldown;
         this.cooldownItem = cooldownItem;
+        this.event = event;
         map.put(id, this);
     }
 
@@ -73,17 +71,9 @@ public class ClickableItem implements Buyable {
 
     public void fireClick(boolean button, Player p) {
         if(p.getInventory().getItemInHand().equals(item)) {
-            if(button ? onLeftClick(p) : onRightClick(p)) {
+            if(button ? event.onLeftClick(p) : event.onRightClick(p)) {
                 startCooldown(p, p.getInventory().getHeldItemSlot());
             }
         }
-    }
-
-    public boolean onLeftClick(Player p) {
-        return false;
-    }
-
-    public boolean onRightClick(Player p) {
-        return false;
     }
 }

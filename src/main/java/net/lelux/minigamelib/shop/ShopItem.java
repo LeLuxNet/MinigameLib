@@ -6,11 +6,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class ShopItem {
 
-    private final Buyable item;
+    private final ItemStack item;
     private final ItemStack watchItem;
     private final ItemStack price;
 
-    public ShopItem(Buyable item, ItemStack watchItem, ItemStack price) {
+    public ShopItem(ItemStack item, ItemStack watchItem, ItemStack price) {
         this.item = item;
         this.watchItem = watchItem;
         this.price = price;
@@ -20,7 +20,7 @@ public class ShopItem {
         return watchItem;
     }
 
-    public Buyable getItem() {
+    public ItemStack getItem() {
         return item;
     }
 
@@ -30,7 +30,7 @@ public class ShopItem {
 
     public void buy(Player p, int count) {
         if(count < 0) {
-            count = item.getItem().getAmount() * - count;
+            count = item.getAmount() * - count;
         }
         int counter = 0;
         for(ItemStack is : p.getInventory()) {
@@ -51,7 +51,7 @@ public class ShopItem {
                 }
             }
         }
-        ItemStack is = item.getItem();
+        ItemStack is = item;
         is.setAmount(is.getAmount() * counter);
         p.getInventory().addItem(is);
     }

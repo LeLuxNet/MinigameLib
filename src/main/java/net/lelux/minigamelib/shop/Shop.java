@@ -56,7 +56,7 @@ public class Shop implements Listener {
         for (int i = 0; i < categories.size(); i++) {
             if (categories.get(i).equals(categories.get(selectedCategories.get(p.getUniqueId().toString())))) {
                 inv.setItem(i + itemsInvSize, new ItemBuilder(categories.get(i)
-                        .getWatchItem()).addEnchantment(Enchantment.LUCK, 0).build());
+                        .getWatchItem()).addEnchantment(Enchantment.LUCK, 1).build());
             }
             inv.setItem(i + itemsInvSize, categories.get(i).getWatchItem());
         }

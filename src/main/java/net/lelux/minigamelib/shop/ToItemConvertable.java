@@ -2,7 +2,7 @@ package net.lelux.minigamelib.shop;
 
 import org.bukkit.inventory.ItemStack;
 
-public interface Buyable {
+public interface ToItemConvertable {
 
     ItemStack getItem();
 }
