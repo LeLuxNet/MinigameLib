@@ -14,13 +14,13 @@ public class JoinLeaveListener implements Listener {
         GamePlayer gp = GamePlayer.toGamePlayer(e.getPlayer());
         if (GameState.is(GameState.LOBBY)) {
             gp.setVisible(true);
-            e.getPlayer().teleport(Minigame.getGameConfig().getMap().getLobbySpawn());
+            e.getPlayer().teleport(Minigame.getGameConfig().getLobbyLoc());
         } else if (GameState.is(GameState.INGAME)) {
             gp.setSpectator(true);
-            e.getPlayer().teleport(Minigame.getGameConfig().getMap().getSpectatorSpawn());
+            e.getPlayer().teleport(Minigame.getMap().getSpectatorSpawn());
         } else if (GameState.is(GameState.END)) {
             gp.setVisible(true);
-            e.getPlayer().teleport(Minigame.getGameConfig().getMap().getEndSpawn());
+            e.getPlayer().teleport(Minigame.getGameConfig().getEndLoc());
         }
         GamePlayer.getInvisiblePlayers().forEach(p ->
                 gp.toPlayer().hidePlayer(p.toPlayer()));

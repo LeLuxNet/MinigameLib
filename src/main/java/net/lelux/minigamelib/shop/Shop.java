@@ -1,9 +1,8 @@
 package net.lelux.minigamelib.shop;
 
 import net.lelux.minigamelib.Minigame;
-import net.lelux.minigamelib.player.GamePlayer;
-import net.lelux.minigamelib.utils.ChestUtils;
 import net.lelux.minigamelib.utils.ItemBuilder;
+import net.lelux.minigamelib.utils.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -37,14 +36,14 @@ public class Shop implements Listener {
     }
 
     private void calcInvSize() {
-        categoryInvSize = ChestUtils.calcSize(categories.size());
+        categoryInvSize = MathUtils.calcSize(categories.size());
         itemsInvSize = 0;
         for (ShopCategory sc : categories) {
             if (sc.items.size() > itemsInvSize) {
                 itemsInvSize = sc.items.size();
             }
         }
-        itemsInvSize = ChestUtils.calcSize(itemsInvSize);
+        itemsInvSize = MathUtils.calcSize(itemsInvSize);
     }
 
     private Inventory build(Player p) {

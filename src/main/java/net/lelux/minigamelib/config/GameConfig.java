@@ -7,22 +7,26 @@ import net.lelux.minigamelib.timer.Countdown;
 import net.lelux.minigamelib.timer.CountdownEvent;
 import net.lelux.minigamelib.timer.GameState;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 
 public class GameConfig {
 
     private final Minigame minigame;
-    private final GameMap map;
+    private final GameMap[] maps;
     private final MySQL mySQL;
     private final Vault vault;
     private final int respawnCount;
     private final Countdown startCountdown;
     private final int skippedStartCountdown;
     private final Countdown stopCountdown;
+    private final Location lobbyLoc;
+    private final Location endLoc;
 
-    public GameConfig(Minigame minigame, GameMap map, MySQL mySQL, int respawnCount,
-                      int startCountdown, int skippedStartCountdown, int stopCountdown) {
+    public GameConfig(Minigame minigame, GameMap[] maps, MySQL mySQL, int respawnCount,
+                      int startCountdown, int skippedStartCountdown, int stopCountdown,
+                      Location lobbyLoc, Location endLoc) {
         this.minigame = minigame;
-        this.map = map;
+        this.maps = maps;
         this.mySQL = mySQL;
         this.vault = new Vault();
         this.respawnCount = respawnCount;
@@ -39,14 +43,16 @@ public class GameConfig {
                 Bukkit.getServer().shutdown();
             }
         });
+        this.lobbyLoc = lobbyLoc;
+        this.endLoc = endLoc;
     }
 
     public Minigame getMinigame() {
         return minigame;
     }
 
-    public GameMap getMap() {
-        return map;
+    public GameMap[] getMaps() {
+        return maps;
     }
 
     public MySQL getMySQL() {
@@ -71,5 +77,13 @@ public class GameConfig {
 
     public int getSkippedStartCountdown() {
         return skippedStartCountdown;
+    }
+
+    public Location getLobbyLoc() {
+        return lobbyLoc;
+    }
+
+    public Location getEndLoc() {
+        return endLoc;
     }
 }

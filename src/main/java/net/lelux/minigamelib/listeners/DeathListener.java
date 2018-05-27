@@ -15,7 +15,7 @@ public class DeathListener implements Listener {
         p.setRespawnCount(subtractRespawnCount(p.getRespawnCount()));
         if (p.getRespawnCount() == 0 || p.isSpectator()) {
             p.setSpectator(true);
-            e.setRespawnLocation(Minigame.getGameConfig().getMap().getSpectatorSpawn());
+            e.setRespawnLocation(Minigame.getMap().getSpectatorSpawn());
         } else {
             e.setRespawnLocation(p.getTeam().getSpawn());
             Minigame.getStatsManager().getStats(p).addDeath();

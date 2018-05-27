@@ -7,22 +7,35 @@ import net.lelux.minigamelib.listeners.DeathListener;
 import net.lelux.minigamelib.listeners.InteractListener;
 import net.lelux.minigamelib.listeners.JoinLeaveListener;
 import net.lelux.minigamelib.player.GamePlayer;
+import net.lelux.minigamelib.shop.ClickEvent;
+import net.lelux.minigamelib.shop.ClickableItem;
 import net.lelux.minigamelib.stats.StatsManager;
 import net.lelux.minigamelib.teams.ScoreboardManager;
 import net.lelux.minigamelib.timer.GameState;
+import net.lelux.minigamelib.utils.ItemBuilder;
 import net.lelux.minigamelib.utils.Languages;
 import net.lelux.minigamelib.utils.Log;
+import net.lelux.minigamelib.utils.MathUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Minigame extends JavaPlugin {
 
     private static GameConfig config;
     private static ScoreboardManager scoreboardManager;
     private static StatsManager statsManager;
+    private static GameMap map;
+    private static Inventory lobbyInv;
 
     @Override
     public void onEnable() {
@@ -30,15 +43,29 @@ public class Minigame extends JavaPlugin {
         preInitialisation();
         Log.info(Languages.getString("stop", "PreInitialisation"), true);
 
+        lobbyInv = Bukkit.createInventory(null, InventoryType.PLAYER);
+        lobbyInv.setItem(28, new ClickableItem(new ItemBuilder(Material.WATCH).setName(
+                Languages.getString("mapselection")).build(), new ClickEvent() {
+            @Override
+            public boolean onLeftClick(Player p) {
+                return false;
+            }
+
+            @Override
+            public boolean onRightClick(Player p) {
+
+                return true;
+            }
+        }).getItem());
+
         Log.info(Languages.getString("start", "Initialisation"), true);
         config = initialisation();
-
         Log.info(Languages.getString("stop", "Initialisation"), true);
 
         GameState.set(GameState.LOBBY);
         config.getMySQL().connect();
         config.getVault().connect();
-        scoreboardManager = new ScoreboardManager(config.getMap().getTeamList(), config.getMap().getTeamCount());
+        scoreboardManager = new ScoreboardManager(map.getTeamList(), map.getTeamCount());
         statsManager = new StatsManager();
         initListeners();
 
@@ -85,14 +112,30 @@ public class Minigame extends JavaPlugin {
 
     public static void changedGameState() {
         if (GameState.is(GameState.LOBBY)) {
-            Bukkit.getServer().getOnlinePlayers()
-                    .forEach(p -> p.teleport(config.getMap().getLobbySpawn()));
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.teleport(config.getLobbyLoc());
+            }
         } else if (GameState.is(GameState.INGAME)) {
+            int maxVotes = 0;
+            for (GameMap map : config.getMaps()) {
+                int votes = map.getVoteCount();
+                if (votes > maxVotes) {
+                    maxVotes = votes;
+                }
+            }
+            List<GameMap> maps = new ArrayList<>();
+            for (GameMap map : config.getMaps()) {
+                int votes = map.getVoteCount();
+                if (votes >= maxVotes) {
+                    maps.add(map);
+                }
+            }
+            map = maps.get(MathUtils.generateRandomInt(maps.size() - 1));
             Bukkit.getServer().getOnlinePlayers()
                     .forEach(p -> p.teleport(GamePlayer.toGamePlayer(p).getTeam().getSpawn()));
         } else if (GameState.is(GameState.END)) {
             Bukkit.getServer().getOnlinePlayers()
-                    .forEach(p -> p.teleport(config.getMap().getEndSpawn()));
+                    .forEach(p -> p.teleport(config.getEndLoc()));
             Bukkit.getServer().getOnlinePlayers()
                     .forEach(p -> GamePlayer.toGamePlayer(p).setVisible(true));
             config.getStopCountdown().start();
@@ -114,9 +157,12 @@ public class Minigame extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("map")) {
             if (sender.hasPermission("minigamelib.map")) {
-                GameMap map = Minigame.getGameConfig().getMap();
-                sender.sendMessage(Languages.getString("map_command",
-                        map.getTeamCount() + "x" + map.getTeamSize(), map.getName()));
+                if (map != null) {
+                    sender.sendMessage(Languages.getString("map_command",
+                            map.getTeamCount() + "x" + map.getTeamSize(), map.getName()));
+                } else {
+                    sender.sendMessage(Languages.getString("map_command_noselection"));
+                }
                 return true;
             }
         } else if (cmd.getName().equalsIgnoreCase("start")) {
@@ -130,5 +176,9 @@ public class Minigame extends JavaPlugin {
             }
         }
         return false;
+    }
+
+    public static GameMap getMap() {
+        return map;
     }
 }

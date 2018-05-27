@@ -2,6 +2,7 @@ package net.lelux.minigamelib.player;
 
 import net.lelux.minigamelib.Minigame;
 import net.lelux.minigamelib.achievements.GameAchievement;
+import net.lelux.minigamelib.config.GameMap;
 import net.lelux.minigamelib.teams.GameTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,6 +21,7 @@ public class GamePlayer {
     private boolean spectator;
     private GameTeam team;
     private int respawnCount;
+    private int votes;
 
     private static Map<String, GamePlayer> gamePlayerMap = new HashMap<>();
     private static List<GamePlayer> invisiblePlayers = new ArrayList<>();
@@ -124,6 +126,22 @@ public class GamePlayer {
         return false;
     }
 
+    public int getVotes() {
+        return votes;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
+    }
+
+    public int getLeftVotes() {
+        int count = 0;
+        for (GameMap map : Minigame.getGameConfig().getMaps()) {
+            count = map.getVote(player);
+        }
+        return votes - count;
+    }
+
     public boolean sellAchievement(GameAchievement a) {
         if (hasAchievement(a) && Minigame.getGameConfig().getVault().isConnected()) {
             Minigame.getGameConfig().getVault().getEco().depositPlayer(player, a.getPrice());
@@ -138,8 +156,9 @@ public class GamePlayer {
     }
 
     public String localizeString(String s) {
-        return s.replaceAll("${PLAYER_NAME}", player.getName())
-                .replaceAll("${TEAM_NAME}", team.getName())
-                .replaceAll("${TEAM_TEXT_COLOR}", team.getTextColor().toString());
+        return s.replace("${PLAYER_NAME}", player.getName())
+                .replace("${TEAM_NAME}", team.getName())
+                .replace("${TEAM_TEXT_COLOR}", team.getTextColor().toString()
+                        .replace("${VOTE_COUNT}", String.valueOf(votes)));
     }
 }

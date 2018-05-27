@@ -6,13 +6,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class InteractListener implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
-        if(e.getItem() != null) {
+        if (e.getItem() != null) {
             NBTItem nbti = new NBTItem(e.getItem());
             if (nbti.hasKey("minigamelib_clickableitem_id")) {
                 ClickableItem clicki = ClickableItem.toClickableItem(

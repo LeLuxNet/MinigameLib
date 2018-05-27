@@ -4,7 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ChestUtils {
 
@@ -28,7 +31,7 @@ public class ChestUtils {
         int count = MathUtils.generateRandomInt(minCount, maxCount);
 
         int probabilityCount = 0;
-        for(Integer i : items.values()) {
+        for (Integer i : items.values()) {
             probabilityCount += i;
         }
 
@@ -45,15 +48,11 @@ public class ChestUtils {
         return inv;
     }
 
-    public static int calcSize(int val) {
-        return (int) Math.ceil(val / 9D) * 9;
-    }
-
     private ItemStack getItem(int numer) {
         int count = 0;
         for (ItemStack is : items.keySet()) {
             count += items.get(is);
-            if(count >= numer) {
+            if (count >= numer) {
                 return is;
             }
         }

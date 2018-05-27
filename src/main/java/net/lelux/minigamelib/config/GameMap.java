@@ -2,9 +2,12 @@ package net.lelux.minigamelib.config;
 
 import net.lelux.minigamelib.teams.GameTeam;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameMap {
 
@@ -12,21 +15,19 @@ public class GameMap {
     private final int teamSize;
     private final String name;
     private final List<GameSpawner> spawners;
-    private final List<GameTeam> teamList;
-    private final Location lobbySpawn;
+    private final GameTeam[] teamList;
     private final Location spectatorSpawn;
-    private final Location endSpawn;
+    private Map<String, Integer> votes;
 
-    public GameMap(String name, int teamCount, int teamSize, List<GameTeam> teamList,
-                   Location lobbySpawn, Location spectatorSpawn, Location endSpawn) {
+    public GameMap(String name, int teamCount, int teamSize,
+                   Location spectatorSpawn, GameTeam... teamList) {
         this.name = name;
         this.teamCount = teamCount;
         this.teamSize = teamSize;
         this.teamList = teamList;
         spawners = new ArrayList<>();
-        this.lobbySpawn = lobbySpawn;
         this.spectatorSpawn = spectatorSpawn;
-        this.endSpawn = endSpawn == null ? lobbySpawn : endSpawn;
+        votes = new HashMap<>();
     }
 
     public String getName() {
@@ -58,19 +59,33 @@ public class GameMap {
         spawners.forEach(GameSpawner::stop);
     }
 
-    public List<GameTeam> getTeamList() {
+    public GameTeam[] getTeamList() {
         return teamList;
-    }
-
-    public Location getLobbySpawn() {
-        return lobbySpawn;
     }
 
     public Location getSpectatorSpawn() {
         return spectatorSpawn;
     }
 
-    public Location getEndSpawn() {
-        return endSpawn;
+    public void setVote(Player p, int count) {
+        votes.remove(p.getUniqueId().toString());
+        if (count > 0) {
+            votes.put(p.getUniqueId().toString(), count);
+        }
+    }
+
+    public int getVote(Player p) {
+        if (votes.containsKey(p.getUniqueId().toString())) {
+            return votes.get(p.getUniqueId().toString());
+        }
+        return 0;
+    }
+
+    public int getVoteCount() {
+        int count = 0;
+        for (int i : votes.values()) {
+            count += i;
+        }
+        return count;
     }
 }

@@ -2,7 +2,7 @@ package net.lelux.minigamelib.achievements;
 
 import net.lelux.minigamelib.Minigame;
 import net.lelux.minigamelib.player.GamePlayer;
-import net.lelux.minigamelib.utils.ChestUtils;
+import net.lelux.minigamelib.utils.MathUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 
@@ -29,7 +29,7 @@ public class GameAchievementGroup {
     }
 
     public Inventory build(GamePlayer p) {
-        Inventory inv = Bukkit.createInventory(null, ChestUtils.calcSize(list.size()), "§r" + name);
+        Inventory inv = Bukkit.createInventory(null, MathUtils.calcSize(list.size()), "§r" + name);
         list.forEach(a -> a.build(p.hasAchievement(a)));
         return inv;
     }

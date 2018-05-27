@@ -1,7 +1,7 @@
 package net.lelux.minigamelib.shop;
 
-import de.tr7zw.itemnbtapi.NBTItem;
 import net.lelux.minigamelib.Minigame;
+import net.lelux.minigamelib.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -24,13 +24,16 @@ public class ClickableItem implements ToItemConvertable {
 
     public ClickableItem(ItemStack item, ItemStack cooldownItem, int cooldown, ClickEvent event) {
         this.id = nextId++;
-        NBTItem nbti = new NBTItem(item);
-        nbti.setInteger("minigamelib_clickableitem_id", id);
-        this.item = nbti.getItem();
+        this.item = new ItemBuilder(item)
+                .setNBTInteger("minigamelib_clickableitem_id", id).build();
         this.cooldown = cooldown;
-        this.cooldownItem = cooldownItem;
+        this.cooldownItem = cooldownItem == null ? item : cooldownItem;
         this.event = event;
         map.put(id, this);
+    }
+
+    public ClickableItem(ItemStack item, ClickEvent event) {
+        this(item, null, 0, event);
     }
 
     public ItemStack getItem() {
@@ -42,7 +45,7 @@ public class ClickableItem implements ToItemConvertable {
     }
 
     private void startCooldown(Player p, int slot) {
-        if (cooldownCount <= 0) {
+        if (cooldown > 0 && cooldownCount <= 0) {
             cooldownCount = cooldown;
             task = Bukkit.getScheduler().runTaskTimer(Minigame.getMinigame(), new Runnable() {
 
@@ -63,15 +66,15 @@ public class ClickableItem implements ToItemConvertable {
     }
 
     public static ClickableItem toClickableItem(int id) {
-        if(map.containsKey(id)) {
+        if (map.containsKey(id)) {
             return map.get(id);
         }
         return null;
     }
 
     public void fireClick(boolean button, Player p) {
-        if(p.getInventory().getItemInHand().equals(item)) {
-            if(button ? event.onLeftClick(p) : event.onRightClick(p)) {
+        if (p.getInventory().getItemInHand().equals(item)) {
+            if (button ? event.onLeftClick(p) : event.onRightClick(p)) {
                 startCooldown(p, p.getInventory().getHeldItemSlot());
             }
         }

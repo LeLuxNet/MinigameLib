@@ -3,7 +3,6 @@ package net.lelux.minigamelib.utils;
 import de.tr7zw.itemnbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -36,6 +35,11 @@ public class ItemBuilder {
         ItemMeta ism = is.getItemMeta();
         ism.setDisplayName(name);
         is.setItemMeta(ism);
+        return this;
+    }
+
+    public ItemBuilder setAmount(int amount) {
+        is.setAmount(amount);
         return this;
     }
 
@@ -87,6 +91,27 @@ public class ItemBuilder {
         lore.add(line);
         ism.setLore(lore);
         is.setItemMeta(ism);
+        return this;
+    }
+
+    public ItemBuilder removeNBTKey(String key) {
+        NBTItem nbti = new NBTItem(is);
+        nbti.removeKey(key);
+        is = nbti.getItem();
+        return this;
+    }
+
+    public ItemBuilder setNBTString(String key, String val) {
+        NBTItem nbti = new NBTItem(is);
+        nbti.setString(key, val);
+        is = nbti.getItem();
+        return this;
+    }
+
+    public ItemBuilder setNBTInteger(String key, int val) {
+        NBTItem nbti = new NBTItem(is);
+        nbti.setInteger(key, val);
+        is = nbti.getItem();
         return this;
     }
 
