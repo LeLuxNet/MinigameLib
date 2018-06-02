@@ -1,5 +1,6 @@
 package net.lelux.minigamelib.config;
 
+import lombok.Getter;
 import net.lelux.minigamelib.Minigame;
 import net.lelux.minigamelib.connections.MySQL;
 import net.lelux.minigamelib.connections.Vault;
@@ -9,6 +10,7 @@ import net.lelux.minigamelib.timer.GameState;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+@Getter
 public class GameConfig {
 
     private final Minigame minigame;
@@ -30,60 +32,10 @@ public class GameConfig {
         this.mySQL = mySQL;
         this.vault = new Vault();
         this.respawnCount = respawnCount;
-        this.startCountdown = new Countdown(startCountdown, new CountdownEvent() {
-            @Override
-            public void fire() {
-                GameState.set(GameState.INGAME);
-            }
-        });
+        this.startCountdown = new Countdown(startCountdown, () -> GameState.set(GameState.INGAME));
         this.skippedStartCountdown = skippedStartCountdown;
-        this.stopCountdown = new Countdown(stopCountdown, new CountdownEvent() {
-            @Override
-            public void fire() {
-                Bukkit.getServer().shutdown();
-            }
-        });
+        this.stopCountdown = new Countdown(stopCountdown, () -> Bukkit.getServer().shutdown());
         this.lobbyLoc = lobbyLoc;
         this.endLoc = endLoc;
-    }
-
-    public Minigame getMinigame() {
-        return minigame;
-    }
-
-    public GameMap[] getMaps() {
-        return maps;
-    }
-
-    public MySQL getMySQL() {
-        return mySQL;
-    }
-
-    public Vault getVault() {
-        return vault;
-    }
-
-    public int getRespawnCount() {
-        return respawnCount;
-    }
-
-    public Countdown getStartCountdown() {
-        return startCountdown;
-    }
-
-    public Countdown getStopCountdown() {
-        return stopCountdown;
-    }
-
-    public int getSkippedStartCountdown() {
-        return skippedStartCountdown;
-    }
-
-    public Location getLobbyLoc() {
-        return lobbyLoc;
-    }
-
-    public Location getEndLoc() {
-        return endLoc;
     }
 }

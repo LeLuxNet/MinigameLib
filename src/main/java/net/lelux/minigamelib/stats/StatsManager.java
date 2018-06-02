@@ -1,5 +1,7 @@
 package net.lelux.minigamelib.stats;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.lelux.minigamelib.player.GamePlayer;
 
 import java.util.HashMap;
@@ -7,7 +9,7 @@ import java.util.Map;
 
 public class StatsManager {
 
-    private boolean active;
+    @Getter @Setter private boolean active;
     private Map<GamePlayer, StatsPacket> packets;
 
     public void upload() {
@@ -31,13 +33,5 @@ public class StatsManager {
             packets.put(p, new StatsPacket());
         }
         return packets.get(p);
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 }

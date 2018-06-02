@@ -1,5 +1,6 @@
 package net.lelux.minigamelib.shop;
 
+import lombok.Getter;
 import net.lelux.minigamelib.Minigame;
 import net.lelux.minigamelib.utils.ItemBuilder;
 import org.bukkit.Bukkit;
@@ -10,13 +11,13 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClickableItem implements ToItemConvertable {
+public class ClickableItem implements ItemConvertable {
 
     private static Map<Integer, ClickableItem> map = new HashMap<>();
     private static int nextId = 0;
-    private final ItemStack item;
+    @Getter private final ItemStack item;
     private final int id;
-    private final ItemStack cooldownItem;
+    @Getter private final ItemStack cooldownItem;
     private final int cooldown;
     private final ClickEvent event;
     private BukkitTask task;
@@ -36,31 +37,18 @@ public class ClickableItem implements ToItemConvertable {
         this(item, null, 0, event);
     }
 
-    public ItemStack getItem() {
-        return item;
-    }
-
-    public ItemStack getCooldownItem() {
-        return cooldownItem;
-    }
-
     private void startCooldown(Player p, int slot) {
         if (cooldown > 0 && cooldownCount <= 0) {
             cooldownCount = cooldown;
-            task = Bukkit.getScheduler().runTaskTimer(Minigame.getMinigame(), new Runnable() {
-
-                @Override
-                public void run() {
-                    if (cooldownCount <= 0) {
-                        p.getInventory().setItem(slot, item);
-                        task.cancel();
-                    } else {
-                        cooldownItem.setAmount(cooldownCount);
-                        p.getInventory().setItem(slot, cooldownItem);
-                        cooldownCount--;
-                    }
+            task = Bukkit.getScheduler().runTaskTimer(Minigame.getMinigame(), () -> {
+                if (cooldownCount <= 0) {
+                    p.getInventory().setItem(slot, item);
+                    task.cancel();
+                } else {
+                    cooldownItem.setAmount(cooldownCount);
+                    p.getInventory().setItem(slot, cooldownItem);
+                    cooldownCount--;
                 }
-
             }, 0, 20);
         }
     }

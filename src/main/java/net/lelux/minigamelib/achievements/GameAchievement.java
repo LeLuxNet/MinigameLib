@@ -1,5 +1,7 @@
 package net.lelux.minigamelib.achievements;
 
+import lombok.Getter;
+import lombok.ToString;
 import net.lelux.minigamelib.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -7,6 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@ToString
 public class GameAchievement {
 
     private final String name;
@@ -46,34 +50,6 @@ public class GameAchievement {
 
     public GameAchievement(String name, String uniqueName, GameAchievementGroup group) {
         this(name, uniqueName, group, 0);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getUniqueName() {
-        return uniqueName;
-    }
-
-    public GameAchievementGroup getGroup() {
-        return group;
-    }
-
-    public Material getHasMaterial() {
-        return hasMaterial;
-    }
-
-    public Material getHasntMaterial() {
-        return hasntMaterial;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public List<String> getDescription() {
-        return description;
     }
 
     public ItemStack build(boolean has) {

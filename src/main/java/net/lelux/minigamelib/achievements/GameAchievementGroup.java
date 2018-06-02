@@ -1,5 +1,7 @@
 package net.lelux.minigamelib.achievements;
 
+import lombok.Getter;
+import lombok.ToString;
 import net.lelux.minigamelib.Minigame;
 import net.lelux.minigamelib.player.GamePlayer;
 import net.lelux.minigamelib.utils.MathUtils;
@@ -9,6 +11,8 @@ import org.bukkit.inventory.Inventory;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@ToString
 public class GameAchievementGroup {
 
     private final List<GameAchievement> list;

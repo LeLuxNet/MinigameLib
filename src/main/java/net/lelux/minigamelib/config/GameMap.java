@@ -1,5 +1,8 @@
 package net.lelux.minigamelib.config;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import net.lelux.minigamelib.teams.GameTeam;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -9,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Getter
+@ToString
 public class GameMap {
 
     private final int teamCount;
@@ -30,41 +35,12 @@ public class GameMap {
         votes = new HashMap<>();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getTeamCount() {
-        return teamCount;
-    }
-
-    public int getTeamSize() {
-        return teamSize;
-    }
-
-    @Override
-    public String toString() {
-        return teamCount + "x" + teamSize + "," + name + "," + spawners;
-    }
-
-    public List<GameSpawner> getSpawners() {
-        return spawners;
-    }
-
     public void startAllSpawners() {
         spawners.forEach(GameSpawner::start);
     }
 
     public void stopAllSpawners() {
         spawners.forEach(GameSpawner::stop);
-    }
-
-    public GameTeam[] getTeamList() {
-        return teamList;
-    }
-
-    public Location getSpectatorSpawn() {
-        return spectatorSpawn;
     }
 
     public void setVote(Player p, int count) {

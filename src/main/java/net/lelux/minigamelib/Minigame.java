@@ -1,5 +1,6 @@
 package net.lelux.minigamelib;
 
+import lombok.Getter;
 import net.lelux.minigamelib.config.GameConfig;
 import net.lelux.minigamelib.config.GameMap;
 import net.lelux.minigamelib.listeners.DamageListener;
@@ -32,8 +33,14 @@ import java.util.List;
 public class Minigame extends JavaPlugin {
 
     private static GameConfig config;
+
+    @Getter
     private static ScoreboardManager scoreboardManager;
+
+    @Getter
     private static StatsManager statsManager;
+
+    @Getter
     private static GameMap map;
     private static Inventory lobbyInv;
 
@@ -81,33 +88,18 @@ public class Minigame extends JavaPlugin {
         config.getMySQL().disconnect();
     }
 
-    public void preInitialisation() {
-    }
+    public void preInitialisation() {}
 
     public GameConfig initialisation() {
         return null;
     }
 
-    public void postInitialisation() {
-    }
+    public void postInitialisation() {}
 
-    public void onStop() {
-    }
-
-    public static GameConfig getGameConfig() {
-        return config;
-    }
+    public void onStop() {}
 
     public static Minigame getMinigame() {
         return config.getMinigame();
-    }
-
-    public static ScoreboardManager getScoreboardManager() {
-        return scoreboardManager;
-    }
-
-    public static StatsManager getStatsManager() {
-        return statsManager;
     }
 
     public static void changedGameState() {
@@ -178,7 +170,7 @@ public class Minigame extends JavaPlugin {
         return false;
     }
 
-    public static GameMap getMap() {
-        return map;
+    public static GameConfig getGameConfig() {
+        return config;
     }
 }

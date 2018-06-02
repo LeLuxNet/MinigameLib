@@ -1,23 +1,22 @@
 package net.lelux.minigamelib.config;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 import net.lelux.minigamelib.Minigame;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
+@ToString
+@AllArgsConstructor
 public class GameSpawner {
 
-    private final Location loc;
-    private final ItemStack drop;
-    private final long ticks;
+    @Getter private final Location loc;
+    @Getter private final ItemStack drop;
+    @Getter private final long ticks;
     private BukkitTask task;
-
-    public GameSpawner(Location loc, ItemStack drop, long ticks) {
-        this.loc = loc;
-        this.drop = drop;
-        this.ticks = ticks;
-    }
 
     public boolean isActive() {
         return task != null;
@@ -25,11 +24,8 @@ public class GameSpawner {
 
     public void start() {
         if (!isActive()) {
-            Bukkit.getScheduler().runTaskTimerAsynchronously(Minigame.getMinigame(), new Runnable() {
-                @Override
-                public void run() {
-                    // TODO: Summon 'drop'-Item
-                }
+            Bukkit.getScheduler().runTaskTimerAsynchronously(Minigame.getMinigame(), () -> {
+                // TODO: Summon 'drop'-Item
             }, 0, ticks);
         }
     }
@@ -39,10 +35,5 @@ public class GameSpawner {
             task.cancel();
             task = null;
         }
-    }
-
-    @Override
-    public String toString() {
-        return loc + "," + drop + "," + ticks;
     }
 }

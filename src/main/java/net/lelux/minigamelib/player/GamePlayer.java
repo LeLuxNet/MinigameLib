@@ -1,5 +1,7 @@
 package net.lelux.minigamelib.player;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.lelux.minigamelib.Minigame;
 import net.lelux.minigamelib.achievements.GameAchievement;
 import net.lelux.minigamelib.config.GameMap;
@@ -18,12 +20,23 @@ public class GamePlayer {
 
     private final Player player;
 
+    @Getter
     private boolean spectator;
+
+    @Getter
+    @Setter
     private GameTeam team;
+
+    @Getter
     private int respawnCount;
+
+    @Getter
+    @Setter
     private int votes;
 
     private static Map<String, GamePlayer> gamePlayerMap = new HashMap<>();
+
+    @Getter
     private static List<GamePlayer> invisiblePlayers = new ArrayList<>();
 
     private GamePlayer(Player player) {
@@ -59,10 +72,6 @@ public class GamePlayer {
         }
     }
 
-    public boolean isSpectator() {
-        return spectator;
-    }
-
     public void setSpectator(boolean val) {
         spectator = val;
         setVisible(!val);
@@ -71,18 +80,6 @@ public class GamePlayer {
         } else {
             Minigame.getScoreboardManager().setTeam(this, team);
         }
-    }
-
-    public void setTeam(GameTeam team) {
-        this.team = team;
-    }
-
-    public GameTeam getTeam() {
-        return team;
-    }
-
-    public int getRespawnCount() {
-        return respawnCount;
     }
 
     public void setRespawnCount(int respawnCount) {
@@ -97,7 +94,7 @@ public class GamePlayer {
         try {
             return rs.getBoolean(a.getUniqueName());
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
         return true;
     }
@@ -126,14 +123,6 @@ public class GamePlayer {
         return false;
     }
 
-    public int getVotes() {
-        return votes;
-    }
-
-    public void setVotes(int votes) {
-        this.votes = votes;
-    }
-
     public int getLeftVotes() {
         int count = 0;
         for (GameMap map : Minigame.getGameConfig().getMaps()) {
@@ -149,10 +138,6 @@ public class GamePlayer {
             return true;
         }
         return false;
-    }
-
-    public static List<GamePlayer> getInvisiblePlayers() {
-        return invisiblePlayers;
     }
 
     public String localizeString(String s) {

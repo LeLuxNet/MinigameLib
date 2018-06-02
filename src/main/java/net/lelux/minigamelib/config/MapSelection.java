@@ -10,24 +10,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class MapSelection implements ClickEvent {
+public class MapSelection implements ClickEvent, Listener {
 
     private final String name;
 
-
     public MapSelection() {
         name = "§r" + Languages.getString("map_selection");
-        Bukkit.getScheduler().runTaskTimer(Minigame.getMinigame(), new Runnable() {
-            @Override
-            public void run() {
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (p.getOpenInventory().getTitle().equals(name)) {
-                        p.openInventory(getInv(p));
-                    }
+        Bukkit.getScheduler().runTaskTimer(Minigame.getMinigame(), () -> {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getOpenInventory().getTitle().equals(name)) {
+                    p.openInventory(getInv(p));
                 }
             }
         }, 5, 0);
