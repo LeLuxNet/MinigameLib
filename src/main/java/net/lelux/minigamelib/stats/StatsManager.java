@@ -16,7 +16,7 @@ public class StatsManager {
 
     public void upload(StatsType type) {
         if (active) {
-            // TODO: Upload to MySQL
+            type.upload();
         }
     }
 

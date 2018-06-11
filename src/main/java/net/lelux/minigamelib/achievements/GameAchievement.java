@@ -63,6 +63,6 @@ public class GameAchievement {
     }
 
     public String getTableName() {
-        return getGroup().getUniqueName() + "_" + uniqueName;
+        return "a_" + getGroup().getUniqueName() + "_" + uniqueName;
     }
 }

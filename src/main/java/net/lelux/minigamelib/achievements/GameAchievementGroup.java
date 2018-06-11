@@ -23,13 +23,11 @@ public class GameAchievementGroup {
         list = new ArrayList<>();
         this.name = name;
         this.uniqueName = "a_" + uniqueName;
-        Minigame.getGameConfig().getMySQL().update("CREATE TABLE IF NOT EXISTS " + uniqueName
-                + " (uuid VARCHAR(36) NOT NULL, PRIMARY KEY (uuid));");
     }
 
     public void add(GameAchievement a) {
         list.add(a);
-        Minigame.getGameConfig().getMySQL().update("CREATE TABLE IF NOT EXISTS " + uniqueName +  "_" + a.getUniqueName()
+        Minigame.getGameConfig().getMySQL().update("CREATE TABLE IF NOT EXISTS " + a.getTableName()
                         + " (uuid VARCHAR(36) NOT NULL, status TINYINT NOT NULL, PRIMARY KEY (uuid));");
     }
 

@@ -18,7 +18,6 @@ public class DeathListener implements Listener {
             e.setRespawnLocation(Minigame.getMap().getSpectatorSpawn());
         } else {
             e.setRespawnLocation(p.getTeam().getSpawn());
-            Minigame.getStatsManager().getStats(p).addDeath();
         }
     }
 
@@ -26,7 +25,6 @@ public class DeathListener implements Listener {
     public void onDeath(PlayerDeathEvent e) {
         if (e.getEntity().getKiller() != null) {
             GamePlayer p = GamePlayer.toGamePlayer(e.getEntity().getKiller());
-            Minigame.getStatsManager().getStats(p).addKill();
         }
     }
 
