@@ -90,9 +90,9 @@ public class GamePlayer {
 
     public boolean hasAchievement(GameAchievement a) {
         ResultSet rs = Minigame.getGameConfig().getMySQL().getResult("SELECT * FROM "
-                + a.getGroup() + " WHERE uuid=" + player.getUniqueId().toString());
+                + a.getTableName() + " WHERE uuid=" + player.getUniqueId().toString());
         try {
-            return rs.getBoolean(a.getUniqueName());
+            return rs.getBoolean("status");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -101,15 +101,15 @@ public class GamePlayer {
 
     public void addAchievement(GameAchievement a) {
         if (!hasAchievement(a)) {
-            Minigame.getGameConfig().getMySQL().update("UPDATE " + a.getGroup() + " SET "
-                    + a.getUniqueName() + "=1 WHERE uuid=" + player.getUniqueId().toString());
+            Minigame.getGameConfig().getMySQL().update("UPDATE " + a.getTableName()
+                    + " SET status=1 WHERE uuid=" + player.getUniqueId().toString());
         }
     }
 
     public void removeAchievement(GameAchievement a) {
         if (hasAchievement(a)) {
-            Minigame.getGameConfig().getMySQL().update("UPDATE " + a.getGroup() + " SET "
-                    + a.getUniqueName() + "=0 WHERE uuid=" + player.getUniqueId().toString());
+            Minigame.getGameConfig().getMySQL().update("UPDATE " + a.getTableName()
+                    + " SET status=0 WHERE uuid=" + player.getUniqueId().toString());
         }
     }
 
@@ -143,7 +143,7 @@ public class GamePlayer {
     public String localizeString(String s) {
         return s.replace("${PLAYER_NAME}", player.getName())
                 .replace("${TEAM_NAME}", team.getName())
-                .replace("${TEAM_TEXT_COLOR}", team.getTextColor().toString()
-                        .replace("${VOTE_COUNT}", String.valueOf(votes)));
+                .replace("${TEAM_TEXT_COLOR}", team.getTextColor().toString())
+                .replace("${VOTE_COUNT}", String.valueOf(votes));
     }
 }

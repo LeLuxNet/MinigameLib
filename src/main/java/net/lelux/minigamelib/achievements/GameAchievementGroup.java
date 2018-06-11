@@ -29,7 +29,8 @@ public class GameAchievementGroup {
 
     public void add(GameAchievement a) {
         list.add(a);
-        Minigame.getGameConfig().getMySQL().update("ALTER TABLE " + uniqueName + " ADD COLUMN " + a.getUniqueName() + " TINYINT NOT NULL");
+        Minigame.getGameConfig().getMySQL().update("CREATE TABLE IF NOT EXISTS " + uniqueName +  "_" + a.getUniqueName()
+                        + " (uuid VARCHAR(36) NOT NULL, status TINYINT NOT NULL, PRIMARY KEY (uuid));");
     }
 
     public Inventory build(GamePlayer p) {

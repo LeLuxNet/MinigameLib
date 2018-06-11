@@ -21,7 +21,8 @@ public class GameAchievement {
     private final double price;
     private final List<String> description;
 
-    public GameAchievement(String name, String uniqueName, GameAchievementGroup group, Material hasMaterial, Material hasntMaterial, double price) {
+    public GameAchievement(String name, String uniqueName, GameAchievementGroup group,
+                           Material hasMaterial, Material hasntMaterial, double price) {
         this.name = name;
         this.uniqueName = uniqueName;
         this.group = group;
@@ -32,11 +33,13 @@ public class GameAchievement {
         description = new ArrayList<>();
     }
 
-    public GameAchievement(String name, String uniqueName, GameAchievementGroup group, Material hasMaterial, Material hasntMaterial) {
+    public GameAchievement(String name, String uniqueName, GameAchievementGroup group,
+                           Material hasMaterial, Material hasntMaterial) {
         this(name, uniqueName, group, hasMaterial, hasntMaterial, 0);
     }
 
-    public GameAchievement(String name, String uniqueName, GameAchievementGroup group, Material material, double price) {
+    public GameAchievement(String name, String uniqueName, GameAchievementGroup group,
+                           Material material, double price) {
         this(name, uniqueName, group, material, material, price);
     }
 
@@ -57,5 +60,9 @@ public class GameAchievement {
                 .setName(name)
                 .setLore(description)
                 .build();
+    }
+
+    public String getTableName() {
+        return getGroup().getUniqueName() + "_" + uniqueName;
     }
 }

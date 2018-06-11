@@ -1,37 +1,26 @@
 package net.lelux.minigamelib.stats;
 
 import lombok.Getter;
-import lombok.Setter;
-import net.lelux.minigamelib.player.GamePlayer;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class StatsManager {
 
-    @Getter @Setter private boolean active;
-    private Map<GamePlayer, StatsPacket> packets;
+    private List<StatsType> list;
+    @Getter
+    private boolean active;
+
+    public void registerStatsType(StatsType type) {
+        list.add(type);
+    }
+
+    public void upload(StatsType type) {
+        if (active) {
+            // TODO: Upload to MySQL
+        }
+    }
 
     public void upload() {
-        if (active) {
-            // TODO: Upload packets to MySQL
-        }
-    }
-
-    public void resetManager() {
-        packets = new HashMap<>();
-    }
-
-    public void resetManager(GamePlayer p) {
-        if (packets != null && packets.containsKey(p)) {
-            packets.remove(p);
-        }
-    }
-
-    public StatsPacket getStats(GamePlayer p) {
-        if (!packets.containsKey(p)) {
-            packets.put(p, new StatsPacket());
-        }
-        return packets.get(p);
+        list.forEach(this::upload);
     }
 }
