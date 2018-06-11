@@ -1,7 +1,5 @@
 package net.lelux.minigamelib.timer;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.lelux.minigamelib.Minigame;
 
 public enum GameState {

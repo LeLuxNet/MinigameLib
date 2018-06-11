@@ -1,8 +1,10 @@
 package net.lelux.minigamelib;
 
+import javafx.scene.control.cell.MapValueFactory;
 import lombok.Getter;
 import net.lelux.minigamelib.config.GameConfig;
 import net.lelux.minigamelib.config.GameMap;
+import net.lelux.minigamelib.config.MapSelection;
 import net.lelux.minigamelib.listeners.DamageListener;
 import net.lelux.minigamelib.listeners.DeathListener;
 import net.lelux.minigamelib.listeners.InteractListener;
@@ -13,6 +15,7 @@ import net.lelux.minigamelib.shop.ClickableItem;
 import net.lelux.minigamelib.stats.StatsManager;
 import net.lelux.minigamelib.teams.ScoreboardManager;
 import net.lelux.minigamelib.timer.GameState;
+import net.lelux.minigamelib.timer.LobbyState;
 import net.lelux.minigamelib.utils.ItemBuilder;
 import net.lelux.minigamelib.utils.Languages;
 import net.lelux.minigamelib.utils.Log;
@@ -38,11 +41,10 @@ public class Minigame extends JavaPlugin {
     private static ScoreboardManager scoreboardManager;
 
     @Getter
-    private static StatsManager statsManager;
+    private static GameMap map;
 
     @Getter
-    private static GameMap map;
-    private static Inventory lobbyInv;
+    private static MapSelection mapSelection;
 
     @Override
     public void onEnable() {
@@ -50,30 +52,16 @@ public class Minigame extends JavaPlugin {
         preInitialisation();
         Log.info(Languages.getString("stop", "PreInitialisation"), true);
 
-        lobbyInv = Bukkit.createInventory(null, InventoryType.PLAYER);
-        lobbyInv.setItem(28, new ClickableItem(new ItemBuilder(Material.WATCH).setName(
-                Languages.getString("mapselection")).build(), new ClickEvent() {
-            @Override
-            public boolean onLeftClick(Player p) {
-                return false;
-            }
-
-            @Override
-            public boolean onRightClick(Player p) {
-
-                return true;
-            }
-        }).getItem());
+        mapSelection = new MapSelection();
 
         Log.info(Languages.getString("start", "Initialisation"), true);
         config = initialisation();
         Log.info(Languages.getString("stop", "Initialisation"), true);
 
         GameState.set(GameState.LOBBY);
+        LobbyState.set(LobbyState.MAP_VOTING);
         config.getMySQL().connect();
         config.getVault().connect();
-        scoreboardManager = new ScoreboardManager(map.getTeamList(), map.getTeamCount());
-        statsManager = new StatsManager();
         initListeners();
 
         Log.info(Languages.getString("start", "PostInitialisation"), true);
@@ -108,6 +96,21 @@ public class Minigame extends JavaPlugin {
                 p.teleport(config.getLobbyLoc());
             }
         } else if (GameState.is(GameState.INGAME)) {
+            Bukkit.getServer().getOnlinePlayers()
+                    .forEach(p -> p.teleport(GamePlayer.toGamePlayer(p).getTeam().getSpawn()));
+        } else if (GameState.is(GameState.END)) {
+            Bukkit.getServer().getOnlinePlayers()
+                    .forEach(p -> p.teleport(config.getEndLoc()));
+            Bukkit.getServer().getOnlinePlayers()
+                    .forEach(p -> GamePlayer.toGamePlayer(p).setVisible(true));
+            config.getStopCountdown().start();
+        }
+    }
+
+    public static void changedLobbyState() {
+        if(LobbyState.is(LobbyState.MAP_VOTING)) {
+
+        } else if(LobbyState.is(LobbyState.TEAM_SELECTION)) {
             int maxVotes = 0;
             for (GameMap map : config.getMaps()) {
                 int votes = map.getVoteCount();
@@ -123,14 +126,7 @@ public class Minigame extends JavaPlugin {
                 }
             }
             map = maps.get(MathUtils.generateRandomInt(maps.size() - 1));
-            Bukkit.getServer().getOnlinePlayers()
-                    .forEach(p -> p.teleport(GamePlayer.toGamePlayer(p).getTeam().getSpawn()));
-        } else if (GameState.is(GameState.END)) {
-            Bukkit.getServer().getOnlinePlayers()
-                    .forEach(p -> p.teleport(config.getEndLoc()));
-            Bukkit.getServer().getOnlinePlayers()
-                    .forEach(p -> GamePlayer.toGamePlayer(p).setVisible(true));
-            config.getStopCountdown().start();
+            scoreboardManager = new ScoreboardManager(map.getTeamList());
         }
     }
 

@@ -6,6 +6,7 @@ import net.lelux.minigamelib.Minigame;
 import net.lelux.minigamelib.achievements.GameAchievement;
 import net.lelux.minigamelib.config.GameMap;
 import net.lelux.minigamelib.teams.GameTeam;
+import net.lelux.minigamelib.teams.TeamManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -22,10 +23,6 @@ public class GamePlayer {
 
     @Getter
     private boolean spectator;
-
-    @Getter
-    @Setter
-    private GameTeam team;
 
     @Getter
     private int respawnCount;
@@ -78,7 +75,7 @@ public class GamePlayer {
         if (val) {
             Minigame.getScoreboardManager().setScoreTeam(this, "01");
         } else {
-            Minigame.getScoreboardManager().setTeam(this, team);
+            Minigame.getScoreboardManager().setTeam(this, getTeam());
         }
     }
 
@@ -140,10 +137,18 @@ public class GamePlayer {
         return false;
     }
 
+    public void setTeam(GameTeam team) {
+        TeamManager.setTeam(player, team);
+    }
+
+    public GameTeam getTeam() {
+        return TeamManager.getTeam(player);
+    }
+
     public String localizeString(String s) {
         return s.replace("${PLAYER_NAME}", player.getName())
-                .replace("${TEAM_NAME}", team.getName())
-                .replace("${TEAM_TEXT_COLOR}", team.getTextColor().toString())
+                .replace("${TEAM_NAME}", getTeam().getName())
+                .replace("${TEAM_TEXT_COLOR}", getTeam().getTextColor().toString())
                 .replace("${VOTE_COUNT}", String.valueOf(votes));
     }
 }

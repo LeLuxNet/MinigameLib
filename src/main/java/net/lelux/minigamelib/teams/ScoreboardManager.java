@@ -12,16 +12,15 @@ public class ScoreboardManager {
     private final Scoreboard scoreboard;
     private final GameTeam[] teamList;
 
-    public ScoreboardManager(GameTeam[] teamList, int teamCount) {
+    public ScoreboardManager(GameTeam[] teamList) {
         scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
         scoreboard.registerNewTeam("01").setPrefix("§8");
         scoreboard.registerNewTeam("02").setPrefix("§0");
 
-        this.teamList = new GameTeam[teamCount];
+        this.teamList = teamList;
 
-        for (int i = 0; i < teamCount; i++) {
-            this.teamList[i] = teamList[i];
+        for (int i = 0; i < teamList.length; i++) {
             Team t = scoreboard.registerNewTeam(String.valueOf(i + 1));
             t.setPrefix(teamList[i].getTextColor().toString());
             t.setAllowFriendlyFire(false);

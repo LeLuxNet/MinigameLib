@@ -15,7 +15,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class MapSelection implements ClickEvent, Listener {
+public class MapSelection implements Listener {
 
     private final String name;
 
@@ -28,17 +28,6 @@ public class MapSelection implements ClickEvent, Listener {
                 }
             }
         }, 5, 0);
-    }
-
-    @Override
-    public boolean onLeftClick(Player p) {
-        return false;
-    }
-
-    @Override
-    public boolean onRightClick(Player p) {
-        p.openInventory(getInv(p));
-        return true;
     }
 
     private ItemStack getItem(GameMap map, Player p) {
@@ -59,7 +48,7 @@ public class MapSelection implements ClickEvent, Listener {
                 .getString(voteCount == 0 ? "vote" : "vote_pl")).build();
     }
 
-    private Inventory getInv(Player p) {
+    public Inventory getInv(Player p) {
         Inventory inv = Bukkit.createInventory(null, MathUtils
                 .calcSize(Minigame.getGameConfig().getMaps().length), name);
         for (int i = 0; i < Minigame.getGameConfig().getMaps().length; i++) {
