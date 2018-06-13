@@ -2,7 +2,6 @@ package net.lelux.minigamelib.stats;
 
 import lombok.Getter;
 import net.lelux.minigamelib.Minigame;
-import net.lelux.minigamelib.connections.MySQL;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -58,7 +57,7 @@ public class StatsType {
     }
 
     void upload() {
-        for(String s : list.keySet()) {
+        for (String s : list.keySet()) {
             Player p = Bukkit.getPlayer(UUID.fromString(s));
             Minigame.getGameConfig().getMySQL().update("UPDATE s_" + uniqueName + " SET status=" +
                     getStats(p) + " WHERE uuid=" + s);

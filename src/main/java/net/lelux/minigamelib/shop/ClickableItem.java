@@ -15,9 +15,11 @@ public class ClickableItem implements ItemConvertable {
 
     private static Map<Integer, ClickableItem> map = new HashMap<>();
     private static int nextId = 0;
-    @Getter private final ItemStack item;
+    @Getter
+    private final ItemStack item;
     private final int id;
-    @Getter private final ItemStack cooldownItem;
+    @Getter
+    private final ItemStack cooldownItem;
     private final int cooldown;
     private final ClickEvent event;
     private BukkitTask task;

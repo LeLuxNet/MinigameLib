@@ -22,12 +22,12 @@ public class TeamManager {
     }
 
     public static void generateRandomTeams() {
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            if(!map.containsKey(p.getUniqueId().toString()) && map.get(p.getUniqueId().toString()) == null) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (!map.containsKey(p.getUniqueId().toString()) && map.get(p.getUniqueId().toString()) == null) {
                 int minCount = Integer.MAX_VALUE;
                 GameTeam team = null;
-                for(GameTeam t : Minigame.getMap().getTeamList()) {
-                    if(getPlayerCount(t) < minCount) {
+                for (GameTeam t : Minigame.getMap().getTeamList()) {
+                    if (getPlayerCount(t) < minCount) {
                         minCount = getPlayerCount(t);
                         team = t;
                     }
@@ -39,8 +39,8 @@ public class TeamManager {
 
     public static int getPlayerCount(GameTeam t) {
         int count = 0;
-        for(GameTeam team : map.values()) {
-            if(team == t) {
+        for (GameTeam team : map.values()) {
+            if (team == t) {
                 count++;
             }
         }
@@ -50,11 +50,11 @@ public class TeamManager {
     public static Player[] getPlayers(GameTeam t) {
         Player[] list = new Player[Minigame.getMap().getTeamSize()];
         int id = 0;
-        for(String s : map.keySet()) {
-            if(map.get(s) == t) {
+        for (String s : map.keySet()) {
+            if (map.get(s) == t) {
                 list[id] = Bukkit.getPlayer(UUID.fromString(s));
                 id++;
-                if(id >= Minigame.getMap().getTeamSize()) {
+                if (id >= Minigame.getMap().getTeamSize()) {
                     break;
                 }
             }

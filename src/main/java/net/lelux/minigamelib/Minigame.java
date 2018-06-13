@@ -1,6 +1,5 @@
 package net.lelux.minigamelib;
 
-import javafx.scene.control.cell.MapValueFactory;
 import lombok.Getter;
 import net.lelux.minigamelib.config.GameConfig;
 import net.lelux.minigamelib.config.GameMap;
@@ -10,25 +9,19 @@ import net.lelux.minigamelib.listeners.DeathListener;
 import net.lelux.minigamelib.listeners.InteractListener;
 import net.lelux.minigamelib.listeners.JoinLeaveListener;
 import net.lelux.minigamelib.player.GamePlayer;
-import net.lelux.minigamelib.shop.ClickEvent;
-import net.lelux.minigamelib.shop.ClickableItem;
-import net.lelux.minigamelib.stats.StatsManager;
 import net.lelux.minigamelib.teams.ScoreboardManager;
+import net.lelux.minigamelib.teams.TeamManager;
 import net.lelux.minigamelib.teams.TeamSelection;
 import net.lelux.minigamelib.timer.GameState;
 import net.lelux.minigamelib.timer.LobbyState;
-import net.lelux.minigamelib.utils.ItemBuilder;
 import net.lelux.minigamelib.utils.Languages;
 import net.lelux.minigamelib.utils.Log;
 import net.lelux.minigamelib.utils.MathUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -81,15 +74,18 @@ public class Minigame extends JavaPlugin {
         config.getMySQL().disconnect();
     }
 
-    public void preInitialisation() {}
+    public void preInitialisation() {
+    }
 
     public GameConfig initialisation() {
         return null;
     }
 
-    public void postInitialisation() {}
+    public void postInitialisation() {
+    }
 
-    public void onStop() {}
+    public void onStop() {
+    }
 
     public static Minigame getMinigame() {
         return config.getMinigame();
@@ -101,21 +97,24 @@ public class Minigame extends JavaPlugin {
                 p.teleport(config.getLobbyLoc());
             }
         } else if (GameState.is(GameState.INGAME)) {
+            TeamManager.generateRandomTeams();
             Bukkit.getServer().getOnlinePlayers()
                     .forEach(p -> p.teleport(GamePlayer.toGamePlayer(p).getTeam().getSpawn()));
         } else if (GameState.is(GameState.END)) {
-            Bukkit.getServer().getOnlinePlayers()
-                    .forEach(p -> p.teleport(config.getEndLoc()));
-            Bukkit.getServer().getOnlinePlayers()
-                    .forEach(p -> GamePlayer.toGamePlayer(p).setVisible(true));
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                GamePlayer gp = GamePlayer.toGamePlayer(p);
+                p.teleport(config.getEndLoc());
+                gp.setSpectator(false);
+                p.sendMessage(Languages.getString(gp.isWinner() ? "winner" : "looser"));
+            }
             config.getStopCountdown().start();
         }
     }
 
     public static void changedLobbyState() {
-        if(LobbyState.is(LobbyState.MAP_VOTING)) {
+        if (LobbyState.is(LobbyState.MAP_VOTING)) {
 
-        } else if(LobbyState.is(LobbyState.TEAM_SELECTION)) {
+        } else if (LobbyState.is(LobbyState.TEAM_SELECTION)) {
             int maxVotes = 0;
             for (GameMap map : config.getMaps()) {
                 int votes = map.getVoteCount();

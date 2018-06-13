@@ -1,7 +1,6 @@
 package net.lelux.minigamelib.config;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 import net.lelux.minigamelib.teams.GameTeam;
 import org.bukkit.Location;

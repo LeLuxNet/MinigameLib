@@ -5,7 +5,6 @@ import net.lelux.minigamelib.Minigame;
 import net.lelux.minigamelib.connections.MySQL;
 import net.lelux.minigamelib.connections.Vault;
 import net.lelux.minigamelib.timer.Countdown;
-import net.lelux.minigamelib.timer.CountdownEvent;
 import net.lelux.minigamelib.timer.GameState;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -36,6 +35,6 @@ public class GameConfig {
         this.skippedStartCountdown = skippedStartCountdown;
         this.stopCountdown = new Countdown(stopCountdown, () -> Bukkit.getServer().shutdown());
         this.lobbyLoc = lobbyLoc;
-        this.endLoc = endLoc;
+        this.endLoc = endLoc == null ? lobbyLoc : endLoc;
     }
 }

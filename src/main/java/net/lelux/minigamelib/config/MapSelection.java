@@ -2,7 +2,6 @@ package net.lelux.minigamelib.config;
 
 import net.lelux.minigamelib.Minigame;
 import net.lelux.minigamelib.player.GamePlayer;
-import net.lelux.minigamelib.shop.ClickEvent;
 import net.lelux.minigamelib.utils.ItemBuilder;
 import net.lelux.minigamelib.utils.Languages;
 import net.lelux.minigamelib.utils.MathUtils;

@@ -10,7 +10,7 @@ public enum LobbyState {
     private static LobbyState state;
 
     public static void set(LobbyState state) {
-        if(LobbyState.state != state) {
+        if (LobbyState.state != state) {
             LobbyState.state = state;
             Minigame.changedLobbyState();
         }

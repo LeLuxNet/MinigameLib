@@ -31,6 +31,10 @@ public class GamePlayer {
     @Setter
     private int votes;
 
+    @Getter
+    @Setter
+    private boolean winner;
+
     private static Map<String, GamePlayer> gamePlayerMap = new HashMap<>();
 
     @Getter

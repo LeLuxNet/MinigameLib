@@ -13,9 +13,12 @@ import org.bukkit.scheduler.BukkitTask;
 @AllArgsConstructor
 public class GameSpawner {
 
-    @Getter private final Location loc;
-    @Getter private final ItemStack drop;
-    @Getter private final long ticks;
+    @Getter
+    private final Location loc;
+    @Getter
+    private final ItemStack drop;
+    @Getter
+    private final long ticks;
     private BukkitTask task;
 
     public boolean isActive() {

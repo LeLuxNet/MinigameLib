@@ -11,7 +11,9 @@ public class Countdown {
 
     private final CountdownEvent event;
     private final int secounds;
-    @Getter @Setter private int countdown;
+    @Getter
+    @Setter
+    private int countdown;
     private BukkitTask task;
     private int runCount;
 
