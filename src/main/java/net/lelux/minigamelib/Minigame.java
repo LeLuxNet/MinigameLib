@@ -14,6 +14,7 @@ import net.lelux.minigamelib.shop.ClickEvent;
 import net.lelux.minigamelib.shop.ClickableItem;
 import net.lelux.minigamelib.stats.StatsManager;
 import net.lelux.minigamelib.teams.ScoreboardManager;
+import net.lelux.minigamelib.teams.TeamSelection;
 import net.lelux.minigamelib.timer.GameState;
 import net.lelux.minigamelib.timer.LobbyState;
 import net.lelux.minigamelib.utils.ItemBuilder;
@@ -46,6 +47,9 @@ public class Minigame extends JavaPlugin {
     @Getter
     private static MapSelection mapSelection;
 
+    @Getter
+    private static TeamSelection teamSelection;
+
     @Override
     public void onEnable() {
         Log.info(Languages.getString("start", "PreInitialisation"), true);
@@ -53,6 +57,7 @@ public class Minigame extends JavaPlugin {
         Log.info(Languages.getString("stop", "PreInitialisation"), true);
 
         mapSelection = new MapSelection();
+        teamSelection = new TeamSelection();
 
         Log.info(Languages.getString("start", "Initialisation"), true);
         config = initialisation();

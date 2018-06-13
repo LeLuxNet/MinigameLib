@@ -3,6 +3,7 @@ package net.lelux.minigamelib.utils;
 import de.tr7zw.itemnbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -91,6 +92,12 @@ public class ItemBuilder {
         lore.add(line);
         ism.setLore(lore);
         is.setItemMeta(ism);
+        return this;
+    }
+
+    public ItemBuilder removeItemFlags(ItemFlag... flags) {
+        ItemMeta ism = is.getItemMeta();
+        ism.removeItemFlags(flags);
         return this;
     }
 

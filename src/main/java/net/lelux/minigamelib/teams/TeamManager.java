@@ -5,13 +5,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class TeamManager {
 
     private static Map<String, GameTeam> map;
 
-    public static void setTeam(Player p, GameTeam t) {
+    public static boolean setTeam(Player p, GameTeam t) {
+        boolean full = getPlayerCount(t) >= Minigame.getMap().getTeamSize();
         map.put(p.getUniqueId().toString(), t);
+        return full;
     }
 
     public static GameTeam getTeam(Player p) {
@@ -35,6 +38,27 @@ public class TeamManager {
     }
 
     public static int getPlayerCount(GameTeam t) {
-        return map.values().size();
+        int count = 0;
+        for(GameTeam team : map.values()) {
+            if(team == t) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static Player[] getPlayers(GameTeam t) {
+        Player[] list = new Player[Minigame.getMap().getTeamSize()];
+        int id = 0;
+        for(String s : map.keySet()) {
+            if(map.get(s) == t) {
+                list[id] = Bukkit.getPlayer(UUID.fromString(s));
+                id++;
+                if(id >= Minigame.getMap().getTeamSize()) {
+                    break;
+                }
+            }
+        }
+        return list;
     }
 }
