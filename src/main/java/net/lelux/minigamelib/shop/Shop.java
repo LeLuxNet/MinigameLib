@@ -49,11 +49,11 @@ public class Shop implements Listener {
     private Inventory build(Player p) {
         calcInvSize();
         Inventory inv = Bukkit.createInventory(null, categoryInvSize + itemsInvSize, name);
-        for (ShopItem si : categories.get(selectedCategories.get(p.getUniqueId().toString())).items) {
+        for (ShopItem si : getSelectedCategory(p).items) {
             inv.addItem(si.getWatchItem());
         }
         for (int i = 0; i < categories.size(); i++) {
-            if (categories.get(i).equals(categories.get(selectedCategories.get(p.getUniqueId().toString())))) {
+            if (categories.get(i).equals(getSelectedCategory(p))) {
                 inv.setItem(i + itemsInvSize, new ItemBuilder(categories.get(i)
                         .getWatchItem()).addEnchantment(Enchantment.LUCK, 1).build());
             }
@@ -83,10 +83,13 @@ public class Shop implements Listener {
             if (e.getRawSlot() >= itemsInvSize) {
                 open(p, e.getRawSlot() - itemsInvSize);
             } else {
-                ShopItem si = categories.get(selectedCategories.get(
-                        p.getUniqueId().toString())).items.get(e.getRawSlot());
+                ShopItem si = getSelectedCategory(p).items.get(e.getRawSlot());
                 si.buy(p, e.isShiftClick() ? -1 : 1);
             }
         }
+    }
+
+    private ShopCategory getSelectedCategory(Player p) {
+        return categories.get(selectedCategories.get(p.getUniqueId().toString()));
     }
 }
