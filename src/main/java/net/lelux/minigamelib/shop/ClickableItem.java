@@ -62,9 +62,9 @@ public class ClickableItem implements ItemConvertable {
         return null;
     }
 
-    public void fireClick(boolean button, Player p) {
+    public void fireClick(ClickEvent.ClickType type, Player p) {
         if (p.getInventory().getItemInHand().equals(item)) {
-            if (button ? event.onLeftClick(p) : event.onRightClick(p)) {
+            if (event.onClick(p, type)) {
                 startCooldown(p, p.getInventory().getHeldItemSlot());
             }
         }

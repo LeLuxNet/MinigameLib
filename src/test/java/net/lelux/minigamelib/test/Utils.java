@@ -1,4 +1,4 @@
-package net.minigamelib.test;
+package net.lelux.minigamelib.test;
 
 import net.lelux.minigamelib.utils.MathUtils;
 import org.junit.Assert;

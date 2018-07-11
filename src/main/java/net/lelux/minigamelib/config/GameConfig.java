@@ -22,19 +22,21 @@ public class GameConfig {
     private final Countdown stopCountdown;
     private final Location lobbyLoc;
     private final Location endLoc;
+    private final boolean smoothExp;
 
     public GameConfig(Minigame minigame, GameMap[] maps, MySQL mySQL, int respawnCount,
                       int startCountdown, int skippedStartCountdown, int stopCountdown,
-                      Location lobbyLoc, Location endLoc) {
+                      Location lobbyLoc, Location endLoc, boolean smoothExp) {
         this.minigame = minigame;
         this.maps = maps;
         this.mySQL = mySQL;
         this.vault = new Vault();
         this.respawnCount = respawnCount;
-        this.startCountdown = new Countdown(startCountdown, () -> GameState.set(GameState.INGAME));
+        this.startCountdown = new Countdown(startCountdown, () -> GameState.set(GameState.INGAME), smoothExp);
         this.skippedStartCountdown = skippedStartCountdown;
-        this.stopCountdown = new Countdown(stopCountdown, () -> Bukkit.getServer().shutdown());
+        this.stopCountdown = new Countdown(stopCountdown, () -> Bukkit.getServer().shutdown(), smoothExp);
         this.lobbyLoc = lobbyLoc;
         this.endLoc = endLoc == null ? lobbyLoc : endLoc;
+        this.smoothExp = smoothExp;
     }
 }

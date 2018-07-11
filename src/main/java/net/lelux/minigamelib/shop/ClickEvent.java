@@ -4,7 +4,10 @@ import org.bukkit.entity.Player;
 
 public interface ClickEvent {
 
-    boolean onLeftClick(Player p);
+    boolean onClick(Player p, ClickType type);
 
-    boolean onRightClick(Player p);
+    enum ClickType {
+        RIGHT,
+        LEFT
+    }
 }

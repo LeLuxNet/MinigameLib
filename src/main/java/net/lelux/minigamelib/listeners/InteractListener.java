@@ -1,6 +1,7 @@
 package net.lelux.minigamelib.listeners;
 
 import de.tr7zw.itemnbtapi.NBTItem;
+import net.lelux.minigamelib.shop.ClickEvent;
 import net.lelux.minigamelib.shop.ClickableItem;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,7 +19,8 @@ public class InteractListener implements Listener {
                         nbti.getInteger("minigamelib_clickableitem_id"));
                 if (e.getAction() != Action.PHYSICAL) {
                     clicki.fireClick(e.getAction() == Action.LEFT_CLICK_AIR ||
-                            e.getAction() == Action.LEFT_CLICK_BLOCK, e.getPlayer());
+                            e.getAction() == Action.LEFT_CLICK_BLOCK ? ClickEvent.ClickType.LEFT :
+                            ClickEvent.ClickType.RIGHT, e.getPlayer());
                     e.setCancelled(true);
                 }
             }
