@@ -12,13 +12,21 @@ public class MySQL extends Connection<java.sql.Connection> {
     private final int port;
     private final String database;
 
-    public MySQL(String username, String password, String host, int port, String database) {
+    public MySQL(String username, String password, String database, String host, int port) {
         super("MySQL");
         this.username = username;
         this.password = password;
+        this.database = database;
         this.host = host;
         this.port = port;
-        this.database = database;
+    }
+
+    public MySQL(String username, String password, String database, String host) {
+        this(username, password, database, host, 3306);
+    }
+
+    public MySQL(String username, String password, String database) {
+        this(username, password, database, "localhost");
     }
 
     public boolean forceConnect() throws SQLException {
