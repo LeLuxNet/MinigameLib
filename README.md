@@ -48,7 +48,7 @@ public class Main extends Minigame {
     }
 
     @Override
-    public void preInitialisation() {
+    public void postInitialisation() {
         // This Code will execute at PostInitialisation
     }
 
